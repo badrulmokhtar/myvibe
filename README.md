@@ -26,6 +26,12 @@ Open [Releases](../../releases) and download the latest **MyVibe Windows x64** Z
 
 > MyVibe is currently a beta. Windows may display an Unknown publisher warning until the production signing certificate is enabled. Beta limitations are always stated in the release notes.
 
+## User guide
+
+Follow the complete [MyVibe and 2.5D Transform user guide](docs/USER-GUIDE.md) for installation, first use, presets, linked groups, updates, removal, recovery, and troubleshooting.
+
+Prefer a printable edition? [Download the PDF user guide](docs/MyVibe-and-2.5D-Transform-User-Guide.pdf).
+
 ## Compatibility
 
 | Component | Current support |
