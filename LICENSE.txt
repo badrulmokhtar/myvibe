@@ -1,0 +1,9 @@
+MyVibe Binary License, Version 1.0
+
+Copyright 2026 MyVibe. All rights reserved.
+
+Permission is granted to download and use unmodified MyVibe release binaries and plug-in packages for personal or commercial creative work, subject to the accompanying compatibility and beta notices.
+
+You may not sell, sublicense, impersonate the publisher of, or redistribute modified copies of the software. You may not remove security, attribution, signature, or integrity information. Reverse engineering is prohibited except where applicable law expressly permits it.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND. TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE PUBLISHER IS NOT LIABLE FOR ANY CLAIM, LOSS, OR DAMAGE ARISING FROM USE OF THE SOFTWARE.

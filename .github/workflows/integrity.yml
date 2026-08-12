@@ -1,0 +1,24 @@
+name: Release integrity
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - uses: actions/setup-node@1e60f620b9541d7c2433eb6d7a9a4b81f4099c93
+        with:
+          node-version: 22
+
+      - run: node tools/verify-catalog.mjs --self-test
+      - run: node tools/verify-catalog.mjs
+      - run: node tools/check-public-tree.mjs

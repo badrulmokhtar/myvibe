@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "channel": "beta",
+  "manager": {
+    "version": "0.2.0",
+    "platform": "windows",
+    "architecture": "x64",
+    "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.2.0/MyVibe-0.2.0-beta.2-win-x64.zip",
+    "sha256": "2CB72F0FDB92FA6334BDBC6FE7A174AF06524250164AE6FBA666416DD4914CEE",
+    "authenticodeRequired": false
+  },
+  "plugins": [
+    {
+      "id": "com.badru.transform2d5",
+      "name": "2.5D Transform",
+      "description": "Non-destructive X/Y/Z and perspective controls for editable Illustrator artwork.",
+      "version": "0.9.5",
+      "host": "Adobe Illustrator",
+      "hostVersion": "30.x",
+      "minimumManagerVersion": "0.2.0",
+      "platform": "windows",
+      "architecture": "x64",
+      "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/transform2d5-v0.9.5/2.5D-Transform-0.9.5-beta-win-x64.zip",
+      "sha256": "88DFA7099458B53EE7D78006C247F368C7470AAA89FED7A426648FAA48932944",
+      "authenticodeRequired": false
+    }
+  ]
+}

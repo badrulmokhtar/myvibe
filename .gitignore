@@ -1,0 +1,13 @@
+*.zip
+*.exe
+*.aip
+*.zxp
+*.p12
+*.pfx
+*.pem
+*.key
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db

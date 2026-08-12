@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MyVibe public catalog",
+  "type": "object",
+  "required": ["schemaVersion", "channel", "manager", "plugins"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "channel": { "enum": ["beta", "stable"] },
+    "manager": { "$ref": "#/$defs/package" },
+    "plugins": { "type": "array", "items": { "$ref": "#/$defs/plugin" } }
+  },
+  "$defs": {
+    "package": {
+      "type": "object",
+      "required": ["version", "platform", "architecture", "downloadUrl", "sha256", "authenticodeRequired"],
+      "properties": {
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "platform": { "const": "windows" },
+        "architecture": { "const": "x64" },
+        "downloadUrl": { "type": "string", "pattern": "^https://github\\.com/.+/releases/download/" },
+        "sha256": { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$" },
+        "authenticodeRequired": { "type": "boolean" }
+      }
+    },
+    "plugin": {
+      "allOf": [
+        { "$ref": "#/$defs/package" },
+        {
+          "type": "object",
+          "required": ["id", "name", "description", "host", "hostVersion", "minimumManagerVersion"],
+          "properties": {
+            "id": { "type": "string" },
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "host": { "const": "Adobe Illustrator" },
+            "hostVersion": { "const": "30.x" },
+            "minimumManagerVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" }
+          }
+        }
+      ]
+    }
+  }
+}
