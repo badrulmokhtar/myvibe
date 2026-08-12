@@ -22,9 +22,15 @@ The first available plug-in is **2.5D Transform**, a non-destructive X/Y/Z and p
 
 ## Download
 
-Open [Releases](../../releases) and download the latest **MyVibe Windows x64** ZIP. Extract it, run `MyVibe.exe`, and approve administrator access only when installing or removing a plug-in.
+Open [Releases](https://github.com/badrulmokhtar/myvibe/releases) and download the latest **MyVibe Windows x64** ZIP. Extract it, run `MyVibe.exe`, and approve administrator access only when installing or removing a plug-in.
 
 > MyVibe is currently a beta. Windows may display an Unknown publisher warning until the production signing certificate is enabled. Beta limitations are always stated in the release notes.
+
+## User guide
+
+Follow the complete [MyVibe and 2.5D Transform user guide](docs/USER-GUIDE.md) for installation, first use, presets, linked groups, updates, removal, recovery, and troubleshooting.
+
+Prefer a printable edition? [Download the PDF user guide](docs/MyVibe-and-2.5D-Transform-User-Guide.pdf).
 
 ## Compatibility
 
@@ -49,7 +55,7 @@ Read [Security](SECURITY.md), [Support](SUPPORT.md), and the [Changelog](CHANGEL
 
 ## Version history
 
-Every published version remains available through [GitHub Releases](../../releases). `catalog.json` points MyVibe to the current compatible versions; releases and tags preserve the history.
+Every published version remains available through [GitHub Releases](https://github.com/badrulmokhtar/myvibe/releases). `catalog.json` points MyVibe to the current compatible versions; releases and tags preserve the history.
 
 ## License
 
