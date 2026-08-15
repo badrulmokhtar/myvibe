@@ -1,0 +1,5 @@
+# Detached signatures must be generated from the same bytes on every platform.
+catalog.json text eol=lf
+catalog.json.sig text eol=lf
+catalog-public-key.json text eol=lf
+tools/verify-catalog.mjs text eol=lf
