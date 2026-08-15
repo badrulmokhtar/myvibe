@@ -51,6 +51,13 @@ Prefer a printable edition? [Download the PDF user guide](docs/MyVibe-and-2.5D-T
 
 MyVibe verifies [`catalog.json`](catalog.json) against [`catalog.json.sig`](catalog.json.sig), verifies package checksums, and retains the last verified catalog for offline use.
 
+The existing signed v1 catalog remains the compatibility source for MyVibe
+0.3.x on Windows. [`catalog-v2.schema.json`](catalog-v2.schema.json) defines the
+cross-platform contract used by MyVibe 0.4+, with separate Windows and macOS
+artifacts and platform-appropriate Authenticode or Apple Developer ID policy.
+The live v2 catalog will be published only after the Mac manager and plug-in
+packages have final release URLs, hashes, signatures, and notarization results.
+
 ## Trust and privacy
 
 - Release assets include SHA-256 checksums.

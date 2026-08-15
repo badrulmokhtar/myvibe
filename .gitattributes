@@ -3,3 +3,5 @@ catalog.json text eol=lf
 catalog.json.sig text eol=lf
 catalog-public-key.json text eol=lf
 tools/verify-catalog.mjs text eol=lf
+catalog-v2.schema.json text eol=lf
+tools/verify-catalog-v2.mjs text eol=lf

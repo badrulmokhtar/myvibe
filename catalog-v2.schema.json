@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MyVibe cross-platform catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "channel", "manager", "plugins"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "channel": { "enum": ["beta", "stable"] },
+    "manager": { "$ref": "#/$defs/manager" },
+    "plugins": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/plugin" }
+    }
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["platform", "architecture", "downloadUrl", "sha256", "signature"],
+      "properties": {
+        "platform": { "enum": ["windows", "macos"] },
+        "architecture": { "enum": ["x64", "arm64", "universal"] },
+        "downloadUrl": {
+          "type": "string",
+          "pattern": "^https://github\\.com/badrulmokhtar/myvibe/releases/download/"
+        },
+        "sha256": { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$" },
+        "signature": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "required"],
+          "properties": {
+            "type": { "enum": ["authenticode", "developer-id"] },
+            "required": { "type": "boolean" },
+            "signerThumbprint": { "type": "string", "pattern": "^[A-Fa-f0-9]{40,64}$" },
+            "teamIdentifier": { "type": "string", "pattern": "^[A-Z0-9]{10}$" }
+          },
+          "allOf": [
+            {
+              "if": {
+                "required": ["type", "required"],
+                "properties": { "type": { "const": "authenticode" }, "required": { "const": true } }
+              },
+              "then": { "required": ["signerThumbprint"] }
+            },
+            {
+              "if": {
+                "required": ["type", "required"],
+                "properties": { "type": { "const": "developer-id" }, "required": { "const": true } }
+              },
+              "then": { "required": ["teamIdentifier"] }
+            }
+          ]
+        }
+      }
+    },
+    "product": {
+      "type": "object",
+      "required": ["id", "name", "version", "artifacts"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/artifact" }
+        }
+      }
+    },
+    "manager": {
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "$ref": "#/$defs/product" },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "const": "com.badru.myvibe" },
+            "minimumOsVersion": { "type": "string", "minLength": 1 }
+          }
+        }
+      ]
+    },
+    "plugin": {
+      "unevaluatedProperties": false,
+      "allOf": [
+        { "$ref": "#/$defs/product" },
+        {
+          "type": "object",
+          "required": ["description", "host", "hostVersion", "minimumManagerVersion"],
+          "properties": {
+            "description": { "type": "string", "minLength": 1 },
+            "host": { "const": "Adobe Illustrator" },
+            "hostVersion": { "const": "30.x" },
+            "minimumManagerVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" }
+          }
+        }
+      ]
+    }
+  }
+}
