@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createPublicKey, verify } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 
 const versionPattern = /^\d+\.\d+\.\d+$/;
@@ -13,7 +14,7 @@ function verifyPackage(value, channel, label) {
   const url = new URL(value.downloadUrl);
   assert.equal(url.protocol, 'https:', `${label}.downloadUrl must use HTTPS`);
   assert.equal(url.hostname, 'github.com', `${label}.downloadUrl must use github.com`);
-  assert(url.pathname.includes('/releases/download/'), `${label}.downloadUrl must target a versioned GitHub Release asset`);
+  assert(url.pathname.toLowerCase().startsWith('/badrulmokhtar/myvibe/releases/download/'), `${label}.downloadUrl must target the official MyVibe release repository`);
   assert.equal(typeof value.authenticodeRequired, 'boolean', `${label}.authenticodeRequired must be boolean`);
   if (channel === 'stable') assert.equal(value.authenticodeRequired, true, `${label} must require Authenticode on the stable channel`);
 }
@@ -40,13 +41,18 @@ if (process.argv.includes('--self-test')) {
   const sample = {
     schemaVersion: 1,
     channel: 'beta',
-    manager: { version: '1.0.0', platform: 'windows', architecture: 'x64', downloadUrl: 'https://github.com/example/repo/releases/download/v1/file.zip', sha256: 'a'.repeat(64), authenticodeRequired: false },
-    plugins: [{ id: 'example', name: 'Example', description: 'Example', version: '1.0.0', host: 'Adobe Illustrator', hostVersion: '30.x', minimumManagerVersion: '1.0.0', platform: 'windows', architecture: 'x64', downloadUrl: 'https://github.com/example/repo/releases/download/v1/plugin.zip', sha256: 'b'.repeat(64), authenticodeRequired: false }]
+    manager: { version: '1.0.0', platform: 'windows', architecture: 'x64', downloadUrl: 'https://github.com/badrulmokhtar/myvibe/releases/download/v1/file.zip', sha256: 'a'.repeat(64), authenticodeRequired: false },
+    plugins: [{ id: 'example', name: 'Example', description: 'Example', version: '1.0.0', host: 'Adobe Illustrator', hostVersion: '30.x', minimumManagerVersion: '1.0.0', platform: 'windows', architecture: 'x64', downloadUrl: 'https://github.com/badrulmokhtar/myvibe/releases/download/v1/plugin.zip', sha256: 'b'.repeat(64), authenticodeRequired: false }]
   };
   verifyCatalog(sample);
   assert.throws(() => verifyCatalog({ ...sample, channel: 'stable' }));
+  assert.throws(() => verifyCatalog({ ...sample, manager: { ...sample.manager, downloadUrl: 'https://github.com/attacker/myvibe/releases/download/v1/file.zip' } }));
   console.log('Catalog verifier self-test passed.');
 } else {
-  verifyCatalog(JSON.parse(readFileSync(new URL('../catalog.json', import.meta.url), 'utf8')));
-  console.log('Catalog verified.');
+  const catalogBytes = readFileSync(new URL('../catalog.json', import.meta.url));
+  const signature = Buffer.from(readFileSync(new URL('../catalog.json.sig', import.meta.url), 'utf8').trim(), 'base64');
+  const publicKey = createPublicKey({ key: JSON.parse(readFileSync(new URL('../catalog-public-key.json', import.meta.url), 'utf8')), format: 'jwk' });
+  assert(verify('sha256', catalogBytes, publicKey, signature), 'catalog.json signature is invalid');
+  verifyCatalog(JSON.parse(catalogBytes.toString('utf8')));
+  console.log('Catalog signature and metadata verified.');
 }
