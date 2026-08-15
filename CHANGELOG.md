@@ -2,6 +2,25 @@
 
 All notable public changes are documented here. Releases follow semantic versioning.
 
+## [0.3.1] - 2026-08-15
+
+### Added
+
+- One-action **Update all plugins** workflow with one administrator approval.
+- CEP manifest version detection for plugins installed manually before MyVibe created a version record.
+- Explicit MyVibe 0.2 migration guidance and repeatable beta lifecycle checks.
+
+### Changed
+
+- Plugin cards now identify available updates after a catalog check.
+- All Update All packages are downloaded and verified before any installed plugin is replaced.
+- Stable packaging is blocked until `MyVibe.exe` has a valid Authenticode signature.
+
+### Security
+
+- Batch update requests are constrained to MyVibe's IPC directory and every package is re-authorized against the signed catalog after elevation.
+- CEP manifest parsing prohibits DTDs and external entity resolution.
+
 ## [0.3.0] - 2026-08-15
 
 ### Added

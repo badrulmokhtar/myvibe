@@ -2,7 +2,7 @@
 
 This guide explains how to install, update, remove, and recover **2.5D Transform** and **ToneMesh** with **MyVibe**, then covers the complete 2.5D Transform workflow inside Adobe Illustrator.
 
-> Current beta compatibility: Windows 10 or Windows 11, x64; Adobe Illustrator 2026, version 30.x; MyVibe 0.3.0; 2.5D Transform 0.9.5; ToneMesh 0.9.3.
+> Current beta compatibility: Windows 10 or Windows 11, x64; Adobe Illustrator 2026, version 30.x; MyVibe 0.3.1; 2.5D Transform 0.9.5; ToneMesh 0.9.3.
 
 [Download the PDF edition](MyVibe-and-2.5D-Transform-User-Guide.pdf)
 
@@ -67,7 +67,7 @@ Continue only when the file came from the official repository and its SHA-256 ch
 
 1. Open the repository [Releases page](https://github.com/badrulmokhtar/myvibe/releases).
 2. Download the latest **MyVibe Windows x64** ZIP.
-3. Extract the ZIP to a normal folder. Do not run the app from inside the ZIP.
+3. Extract the ZIP to a writable user folder. Do not run the app from inside the ZIP or place it under `Program Files`.
 4. Find `MyVibe.exe`, `BETA-README.txt`, and `SHA256SUMS.txt` in the extracted folder.
 5. Verify the checksum before running the app.
 
@@ -78,6 +78,10 @@ Get-FileHash -Algorithm SHA256 -LiteralPath .\MyVibe.exe
 ```
 
 Compare the displayed hash with the `MyVibe.exe` value in `SHA256SUMS.txt`. The values must match exactly.
+
+### Upgrade from MyVibe 0.2
+
+MyVibe 0.2 detects the current manager but cannot replace its own unsigned executable. Download the latest ZIP once, extract it to a writable user folder, and run the new `MyVibe.exe`. MyVibe 0.3 and later can install future verified manager updates in-app.
 
 ## 4. Install a plugin
 
@@ -245,9 +249,20 @@ MyVibe contacts GitHub only when it checks the public catalog or downloads an up
 
 MyVibe verifies the download and saves the current plug-in before replacing it. If the update fails, it attempts to restore the previous copy.
 
+### Update all plugins
+
+1. Save your work and close Illustrator.
+2. Select **Check for updates**.
+3. Select **Update all plugins** when the action appears.
+4. Review the listed versions and confirm.
+5. Approve the single administrator prompt.
+6. Restart Illustrator after every update completes.
+
+MyVibe downloads and verifies all selected packages before changing any installed plugin. Each plugin receives its own backup and rollback protection.
+
 ### Update or restore MyVibe
 
-When a future manager update is offered, the update action verifies the release, stores the current manager version, replaces MyVibe, and restarts it.
+When a future manager update is offered, select **Check for updates**, then select **Update MyVibe to [version]**. MyVibe verifies the release, stores the current manager version, replaces itself, and restarts.
 
 Open **Version history** to see restorable manager versions. A restorable entry appears only after the first successful manager update. Restoring a manager version does not automatically change the installed plug-in version.
 

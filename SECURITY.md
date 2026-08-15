@@ -10,7 +10,7 @@ Do not disclose a vulnerability in a public issue. Use GitHub's private vulnerab
 
 ## Release integrity
 
-Compare downloads with the SHA-256 digest shown in the GitHub Release and catalog. MyVibe 0.3.0 also verifies `catalog.json.sig` before trusting catalog metadata. Stable Windows releases must have a valid trusted Authenticode signature. Beta Windows binaries are not publicly trusted and can show an Unknown publisher warning. A checksum mismatch means the file must not be run.
+Compare downloads with the SHA-256 digest shown in the GitHub Release and catalog. MyVibe 0.3.1 verifies `catalog.json.sig` before trusting catalog metadata and re-authorizes every plugin package after elevation. Stable packaging is blocked unless the Windows executable has a valid trusted Authenticode signature. Beta Windows binaries are not publicly trusted and can show an Unknown publisher warning. A checksum mismatch means the file must not be run.
 
 ## Data handling
 
