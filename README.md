@@ -18,7 +18,10 @@
 
 MyVibe shows compatible plug-ins, their installed and available versions, and the applications they support. Installation and removal create a backup first and stop safely when Adobe Illustrator is open.
 
-The first available plug-in is **2.5D Transform**, a non-destructive X/Y/Z and perspective workflow for editable Illustrator artwork.
+MyVibe currently manages two plug-ins independently:
+
+- **2.5D Transform** — non-destructive X/Y/Z and perspective workflows for editable Illustrator artwork.
+- **ToneMesh** — editable tone-driven vector fields with custom marks, structures, appearance handles, and contour wrapping.
 
 ## Download
 
@@ -28,7 +31,7 @@ Open [Releases](https://github.com/badrulmokhtar/myvibe/releases) and download t
 
 ## User guide
 
-Follow the complete [MyVibe and 2.5D Transform user guide](docs/USER-GUIDE.md) for installation, first use, presets, linked groups, updates, removal, recovery, and troubleshooting.
+Follow the [MyVibe user guide](docs/USER-GUIDE.md) for installation, updates, removal, recovery, and the complete 2.5D Transform workflow.
 
 Prefer a printable edition? [Download the PDF user guide](docs/MyVibe-and-2.5D-Transform-User-Guide.pdf).
 
@@ -38,14 +41,16 @@ Prefer a printable edition? [Download the PDF user guide](docs/MyVibe-and-2.5D-T
 | --- | --- |
 | Operating system | Windows 10/11 x64 |
 | Adobe application | Illustrator 2026, version 30.x |
-| MyVibe | 0.2.0 beta |
+| MyVibe | 0.3.0 beta |
 | 2.5D Transform | 0.9.5 beta |
+| ToneMesh | 0.9.3 beta |
 
-MyVibe reads the public [`catalog.json`](catalog.json), verifies package checksums, and retains the last valid catalog for offline use.
+MyVibe verifies [`catalog.json`](catalog.json) against [`catalog.json.sig`](catalog.json.sig), verifies package checksums, and retains the last verified catalog for offline use.
 
 ## Trust and privacy
 
 - Release assets include SHA-256 checksums.
+- Catalog metadata is signed independently from GitHub hosting.
 - Stable Windows assets must carry a trusted Authenticode signature.
 - CEP panels are packaged with Adobe's signing tool.
 - No account, telemetry, advertising, or background service is required.

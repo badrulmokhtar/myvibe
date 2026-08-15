@@ -1,8 +1,8 @@
-# MyVibe and 2.5D Transform user guide
+# MyVibe plugin manager and 2.5D Transform user guide
 
-This guide explains how to install, update, remove, and recover **2.5D Transform** with **MyVibe**, then use the plug-in inside Adobe Illustrator.
+This guide explains how to install, update, remove, and recover **2.5D Transform** and **ToneMesh** with **MyVibe**, then covers the complete 2.5D Transform workflow inside Adobe Illustrator.
 
-> Current beta compatibility: Windows 10 or Windows 11, x64; Adobe Illustrator 2026, version 30.x; MyVibe 0.2.0; 2.5D Transform 0.9.5.
+> Current beta compatibility: Windows 10 or Windows 11, x64; Adobe Illustrator 2026, version 30.x; MyVibe 0.3.0; 2.5D Transform 0.9.5; ToneMesh 0.9.3.
 
 [Download the PDF edition](MyVibe-and-2.5D-Transform-User-Guide.pdf)
 
@@ -11,7 +11,7 @@ This guide explains how to install, update, remove, and recover **2.5D Transform
 1. [What you are installing](#1-what-you-are-installing)
 2. [Before you begin](#2-before-you-begin)
 3. [Download and verify MyVibe](#3-download-and-verify-myvibe)
-4. [Install 2.5D Transform](#4-install-25d-transform)
+4. [Install a plugin](#4-install-a-plugin)
 5. [Open the plug-in in Illustrator](#5-open-the-plug-in-in-illustrator)
 6. [Create your first 2.5D transformation](#6-create-your-first-25d-transformation)
 7. [Work with multiple objects](#7-work-with-multiple-objects)
@@ -26,12 +26,14 @@ This guide explains how to install, update, remove, and recover **2.5D Transform
 
 ## 1. What you are installing
 
-MyVibe is a Windows manager for creative plug-ins. It installs both parts required by 2.5D Transform:
+MyVibe is a Windows manager for creative plug-ins. It installs both parts required by 2.5D Transform and ToneMesh:
 
 - The native `.aip` engine that performs the Illustrator transformation.
 - The CEP interface that provides the main panel and Linked Groups panel.
 
 2.5D Transform adds live X, Y, Z, and perspective controls for editable Illustrator artwork. It supports paths, compound paths, Pathfinder results, groups, clipping groups, live text, symbols, gradients, raster images, and placed images.
+
+ToneMesh creates editable tone-driven vector fields from solid fills, gradients, and mesh gradients. It includes multiple structures and marks, custom marks, appearance handles, and contour-aware edge behavior.
 
 MyVibe creates a backup before it installs, updates, or removes the plug-in. If an operation fails, it attempts to restore the previous copy.
 
@@ -77,18 +79,18 @@ Get-FileHash -Algorithm SHA256 -LiteralPath .\MyVibe.exe
 
 Compare the displayed hash with the `MyVibe.exe` value in `SHA256SUMS.txt`. The values must match exactly.
 
-## 4. Install 2.5D Transform
+## 4. Install a plugin
 
 1. Close Adobe Illustrator.
 2. Run `MyVibe.exe`.
-3. Select the **2.5D Transform** card.
+3. Select the **2.5D Transform** or **ToneMesh** card.
 4. Review the detail panel. Confirm that Illustrator 2026 and the Visual C++ runtime are detected.
 5. Select **Install plugin**.
 6. Approve the Windows administrator prompt. MyVibe requests elevated access only when it changes the Illustrator installation.
 7. Wait for the success message. Do not open Illustrator while installation is in progress.
 8. Start Illustrator after MyVibe confirms that installation is complete.
 
-MyVibe installs the native engine and CEP interface together. Avoid manually mixing files from different releases.
+MyVibe installs the selected native engine and CEP interface together. 2.5D Transform can be installed from the bundled offline payload; ToneMesh requires the verified online catalog. Avoid manually mixing files from different releases.
 
 ## 5. Open the plug-in in Illustrator
 
@@ -99,6 +101,10 @@ Open the main panel from:
 Open the companion panel from:
 
 **Window > Extensions > 2.5D Transform: Linked Groups**
+
+Open ToneMesh from:
+
+**Window > Extensions > ToneMesh**
 
 You can dock either panel with your other Illustrator panels and resize it. The controls reflow as the panel becomes wider or narrower.
 
@@ -230,10 +236,10 @@ MyVibe contacts GitHub only when it checks the public catalog or downloads an up
 2. Select **Check for updates**.
 3. Review any available MyVibe or plug-in version.
 
-### Update 2.5D Transform
+### Update a plugin
 
 1. Save your work and close Illustrator.
-2. Select **Update to [version]** when MyVibe offers a plug-in update.
+2. Select the plugin card, then select **Update to [version]** when MyVibe offers an update.
 3. Approve the administrator prompt.
 4. Restart Illustrator after the update completes.
 
@@ -248,7 +254,7 @@ Open **Version history** to see restorable manager versions. A restorable entry 
 ## 13. Remove the plug-in
 
 1. Save your Illustrator documents and close Illustrator.
-2. Open MyVibe and select **2.5D Transform**.
+2. Open MyVibe and select the plugin you want to remove.
 3. Select **Remove plugin**.
 4. Read the confirmation, then select the removal action.
 5. Approve the administrator prompt.
@@ -256,7 +262,7 @@ Open **Version history** to see restorable manager versions. A restorable entry 
 
 MyVibe backs up the current native engine and CEP interface before removal. Backups are stored under:
 
-`%LOCALAPPDATA%\MyVibe\backups\2.5D Transform`
+`%LOCALAPPDATA%\MyVibe\backups\<plugin name>`
 
 ## 14. Troubleshooting
 
@@ -306,8 +312,9 @@ MyVibe normally restores the previous copy. Read the complete message, keep Illu
 
 | Goal | Action |
 | --- | --- |
-| Install the plug-in | Close Illustrator, open MyVibe, select 2.5D Transform, select Install plugin |
+| Install a plug-in | Close Illustrator, open MyVibe, select its card, select Install plugin |
 | Open the main panel | Window > Extensions > 2.5D Transform |
+| Open ToneMesh | Window > Extensions > ToneMesh |
 | Open linked-group management | Window > Extensions > 2.5D Transform: Linked Groups |
 | Reuse a view without a relationship | Copy view, select other artwork, Paste view |
 | Keep objects synchronized | Select two or more objects, Link selection |

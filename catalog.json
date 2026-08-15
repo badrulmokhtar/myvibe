@@ -2,11 +2,13 @@
   "schemaVersion": 1,
   "channel": "beta",
   "manager": {
-    "version": "0.2.0",
+    "id": "com.badru.myvibe",
+    "name": "MyVibe",
+    "version": "0.3.0",
     "platform": "windows",
     "architecture": "x64",
-    "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.2.0/MyVibe-0.2.0-beta.2-win-x64.zip",
-    "sha256": "2CB72F0FDB92FA6334BDBC6FE7A174AF06524250164AE6FBA666416DD4914CEE",
+    "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.3.0/MyVibe-0.3.0-beta.1-win-x64.zip",
+    "sha256": "EB0A8C61DA03EE0A48E92733B9B3DC8EFFDD4E02A3E03DF67A6162D6235D573D",
     "authenticodeRequired": false
   },
   "plugins": [
@@ -22,6 +24,20 @@
       "architecture": "x64",
       "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/transform2d5-v0.9.5/2.5D-Transform-0.9.5-beta-win-x64.zip",
       "sha256": "88DFA7099458B53EE7D78006C247F368C7470AAA89FED7A426648FAA48932944",
+      "authenticodeRequired": false
+    },
+    {
+      "id": "com.badru.tonemesh",
+      "name": "ToneMesh",
+      "description": "Editable tone-driven vector fields with custom structures, marks, appearance handles, and contour wrapping.",
+      "version": "0.9.3",
+      "host": "Adobe Illustrator",
+      "hostVersion": "30.x",
+      "minimumManagerVersion": "0.3.0",
+      "platform": "windows",
+      "architecture": "x64",
+      "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/tonemesh-v0.9.3/ToneMesh-0.9.3-beta-win-x64.zip",
+      "sha256": "B5F3695F99459BEA4AA12625D7968A2AAF8728F49A72644747C3E4F9E9673841",
       "authenticodeRequired": false
     }
   ]

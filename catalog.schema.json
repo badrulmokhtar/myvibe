@@ -17,9 +17,10 @@
         "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
         "platform": { "const": "windows" },
         "architecture": { "const": "x64" },
-        "downloadUrl": { "type": "string", "pattern": "^https://github\\.com/.+/releases/download/" },
+        "downloadUrl": { "type": "string", "pattern": "^https://github\\.com/badrulmokhtar/myvibe/releases/download/" },
         "sha256": { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$" },
-        "authenticodeRequired": { "type": "boolean" }
+        "authenticodeRequired": { "type": "boolean" },
+        "signerThumbprint": { "type": "string", "pattern": "^[A-Fa-f0-9]{40,64}$" }
       }
     },
     "plugin": {
