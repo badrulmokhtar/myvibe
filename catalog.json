@@ -4,11 +4,11 @@
   "manager": {
     "id": "com.badru.myvibe",
     "name": "MyVibe",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "platform": "windows",
     "architecture": "x64",
-    "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.3.0/MyVibe-0.3.0-beta.1-win-x64.zip",
-    "sha256": "EB0A8C61DA03EE0A48E92733B9B3DC8EFFDD4E02A3E03DF67A6162D6235D573D",
+    "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.3.1/MyVibe-0.3.1-beta.1-win-x64.zip",
+    "sha256": "312A3092FA858F2044FBED1164A29991701D1BB822BF3C882A3EF4EBBD3AD728",
     "authenticodeRequired": false
   },
   "plugins": [

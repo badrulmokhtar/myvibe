@@ -25,7 +25,11 @@ MyVibe currently manages two plug-ins independently:
 
 ## Download
 
-Open [Releases](https://github.com/badrulmokhtar/myvibe/releases) and download the latest **MyVibe Windows x64** ZIP. Extract it, run `MyVibe.exe`, and approve administrator access only when installing or removing a plug-in.
+Open [Releases](https://github.com/badrulmokhtar/myvibe/releases) and download the latest **MyVibe Windows x64** ZIP. Extract it to a writable user folder, run `MyVibe.exe`, and approve administrator access only when installing, updating, or removing a plug-in.
+
+MyVibe 0.3.1 can update all installed plug-ins from one action. It downloads and verifies every package before requesting one administrator approval.
+
+> Upgrading from MyVibe 0.2? That version detects 0.3.1 but cannot replace its own unsigned executable. Download and extract 0.3.1 once. Future verified manager updates can install and restart in-app from MyVibe 0.3+.
 
 > MyVibe is currently a beta. Windows may display an Unknown publisher warning until the production signing certificate is enabled. Beta limitations are always stated in the release notes.
 
@@ -41,7 +45,7 @@ Prefer a printable edition? [Download the PDF user guide](docs/MyVibe-and-2.5D-T
 | --- | --- |
 | Operating system | Windows 10/11 x64 |
 | Adobe application | Illustrator 2026, version 30.x |
-| MyVibe | 0.3.0 beta |
+| MyVibe | 0.3.1 beta |
 | 2.5D Transform | 0.9.5 beta |
 | ToneMesh | 0.9.3 beta |
 
