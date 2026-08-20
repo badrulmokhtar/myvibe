@@ -2090,35 +2090,27 @@ namespace MyVibe
         {
             try
             {
-                try
-                {
-                    PublicCatalog downloaded = await DownloadAndCache(CatalogV2Url, CatalogV2SignatureUrl, CachedCatalogV2Path, CachedSignatureV2Path);
-                    return BuildResult(downloaded, false);
-                }
-                catch
-                {
-                    try
-                    {
-                        return BuildResult(LoadVerified(CachedCatalogV2Path, CachedSignatureV2Path), true);
-                    }
-                    catch
-                    {
-                        try
-                        {
-                            PublicCatalog legacy = await DownloadAndCache(CatalogV1Url, CatalogV1SignatureUrl, CachedCatalogPath, CachedSignaturePath);
-                            return BuildResult(legacy, false);
-                        }
-                        catch
-                        {
-                            return BuildResult(LoadVerified(CachedCatalogPath, CachedSignaturePath), true);
-                        }
-                    }
-                }
+                PublicCatalog downloaded = await DownloadAndCache(CatalogV2Url, CatalogV2SignatureUrl, CachedCatalogV2Path, CachedSignatureV2Path);
+                return BuildResult(downloaded, false);
             }
-            catch
+            catch { }
+            try
             {
-                return new CatalogCheckResult { Message = "Unable to verify the update catalog. The bundled 2.5D Transform installer remains available offline." };
+                return BuildResult(LoadVerified(CachedCatalogV2Path, CachedSignatureV2Path), true);
             }
+            catch { }
+            try
+            {
+                PublicCatalog legacy = await DownloadAndCache(CatalogV1Url, CatalogV1SignatureUrl, CachedCatalogPath, CachedSignaturePath);
+                return BuildResult(legacy, false);
+            }
+            catch { }
+            try
+            {
+                return BuildResult(LoadVerified(CachedCatalogPath, CachedSignaturePath), true);
+            }
+            catch { }
+            return new CatalogCheckResult { Message = "Unable to verify the update catalog. The bundled 2.5D Transform installer remains available offline." };
         }
 
         private static async Task<PublicCatalog> DownloadAndCache(string catalogUrl, string signatureUrl, string catalogPath, string signaturePath)
