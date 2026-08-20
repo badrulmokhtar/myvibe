@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "channel": "beta",
+  "manager": {
+    "id": "com.badru.myvibe",
+    "name": "MyVibe",
+    "version": "0.3.1",
+    "platform": "windows",
+    "architecture": "x64",
+    "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.3.1/MyVibe-0.3.1-beta.1-win-x64.zip",
+    "sha256": "312A3092FA858F2044FBED1164A29991701D1BB822BF3C882A3EF4EBBD3AD728",
+    "authenticodeRequired": false
+  },
+  "plugins": [
+    {
+      "id": "com.badru.transform2d5",
+      "name": "2.5D Transform",
+      "version": "0.9.5",
+      "host": "Adobe Illustrator",
+      "hostVersion": "30.x",
+      "minimumManagerVersion": "0.2.0",
+      "platform": "windows",
+      "architecture": "x64",
+      "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/transform2d5-v0.9.5/2.5D-Transform-0.9.5-beta-win-x64.zip",
+      "sha256": "88DFA7099458B53EE7D78006C247F368C7470AAA89FED7A426648FAA48932944",
+      "authenticodeRequired": false
+    },
+    {
+      "id": "com.badru.tonemesh",
+      "name": "ToneMesh",
+      "version": "0.9.3",
+      "host": "Adobe Illustrator",
+      "hostVersion": "30.x",
+      "minimumManagerVersion": "0.3.0",
+      "platform": "windows",
+      "architecture": "x64",
+      "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/tonemesh-v0.9.3/ToneMesh-0.9.3-beta-win-x64.zip",
+      "sha256": "B5F3695F99459BEA4AA12625D7968A2AAF8728F49A72644747C3E4F9E9673841",
+      "authenticodeRequired": false
+    }
+  ]
+}

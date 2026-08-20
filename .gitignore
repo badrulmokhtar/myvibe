@@ -11,3 +11,13 @@
 !.env.example
 .DS_Store
 Thumbs.db
+
+# Local Windows build and release material
+windows/bin/
+windows/dist/
+windows/payload/
+windows/tools/ZXPSignCmd.exe
+windows/catalog-signing-private.key
+
+# Local macOS build output
+macos/build/

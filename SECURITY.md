@@ -10,7 +10,11 @@ Do not disclose a vulnerability in a public issue. Use GitHub's private vulnerab
 
 ## Release integrity
 
-Compare downloads with the SHA-256 digest shown in the GitHub Release and catalog. MyVibe 0.3.1 verifies `catalog.json.sig` before trusting catalog metadata and re-authorizes every plugin package after elevation. Stable packaging is blocked unless the Windows executable has a valid trusted Authenticode signature. Beta Windows binaries are not publicly trusted and can show an Unknown publisher warning. A checksum mismatch means the file must not be run.
+Compare downloads with the SHA-256 digest shown in the GitHub Release and catalog. MyVibe verifies the catalog signature before trusting metadata, accepts artifacts only from the official MyVibe GitHub release path, verifies every package checksum, and re-authorizes Windows packages after elevation. A checksum mismatch means the file must not be run.
+
+Beta artifacts may omit Windows Authenticode or Apple Developer ID certificates. MyVibe must disclose that state and receive explicit consent before installing or updating one. On macOS, quarantine is removed only from the already verified staged plug-in payload; Adobe CEP developer mode is enabled for the current user only when the verified beta CEP payload is unsigned. Stable catalog entries always require a platform-trusted signature and the expected publisher identity.
+
+See [Unsigned beta installation](docs/UNSIGNED-BETA.md) for the expected Windows and macOS warnings. These warnings are not evidence of package integrity; the signed catalog and SHA-256 verification remain mandatory.
 
 ## Data handling
 
