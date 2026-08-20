@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 2,
+  "channel": "beta",
+  "manager": {
+    "id": "com.badru.myvibe",
+    "name": "MyVibe",
+    "version": "0.4.0",
+    "minimumOsVersion": "13.0",
+    "artifacts": [
+      {
+        "platform": "macos",
+        "architecture": "universal",
+        "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.4.0/MyVibe-0.4.0-beta.1-macos-universal.zip",
+        "sha256": "f78b54defcb643f2f72fa1a38bf6190569645497558d1fa0a4c540e3d9f00a92",
+        "signature": {
+          "type": "developer-id",
+          "required": false
+        }
+      }
+    ]
+  },
+  "plugins": [
+    {
+      "id": "com.badru.transform2d5",
+      "name": "2.5D Transform",
+      "version": "0.9.5",
+      "description": "Create precise 2.5D views while keeping text, vectors, gradients, and linked artwork editable.",
+      "host": "Adobe Illustrator",
+      "hostVersion": "30.x",
+      "minimumManagerVersion": "0.4.0",
+      "artifacts": [
+        {
+          "platform": "macos",
+          "architecture": "universal",
+          "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/transform2d5-v0.9.5/2.5D-Transform-0.9.5-beta-macos-universal.zip",
+          "sha256": "b42e7861ac4d821d26e25439315b25d97ee653ed5f3844b38f6193b775b23e14",
+          "signature": {
+            "type": "developer-id",
+            "required": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "com.badru.tonemesh",
+      "name": "ToneMesh",
+      "version": "0.9.3",
+      "description": "Build editable halftone fields from solid fills, gradients, mesh gradients, and custom marks.",
+      "host": "Adobe Illustrator",
+      "hostVersion": "30.x",
+      "minimumManagerVersion": "0.4.0",
+      "artifacts": [
+        {
+          "platform": "macos",
+          "architecture": "universal",
+          "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/tonemesh-v0.9.3/ToneMesh-0.9.3-beta-macos-universal.zip",
+          "sha256": "96d99975430400a7a6eb48701146e1fd31c1390094b3072e1603193e8ddeb462",
+          "signature": {
+            "type": "developer-id",
+            "required": false
+          }
+        }
+      ]
+    }
+  ]
+}

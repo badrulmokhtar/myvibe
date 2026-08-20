@@ -107,7 +107,7 @@ if (process.argv.includes('--self-test')) {
   assert(catalogPath && signaturePath, 'Usage: node tools/verify-catalog-v2.mjs <catalog-v2.json> <catalog-v2.json.sig>');
   const catalogBytes = readFileSync(catalogPath);
   const signature = Buffer.from(readFileSync(signaturePath, 'utf8').trim(), 'base64');
-  const publicKey = createPublicKey({ key: JSON.parse(readFileSync(new URL('../catalog-public-key.json', import.meta.url), 'utf8')), format: 'jwk' });
+  const publicKey = createPublicKey(readFileSync(new URL('../macos/catalog-v2-public-key.pem', import.meta.url)));
   assert(verify('sha256', catalogBytes, publicKey, signature), 'catalog v2 signature is invalid');
   verifyCatalogV2(JSON.parse(catalogBytes.toString('utf8')));
   console.log('Cross-platform catalog signature and metadata verified.');
