@@ -16,6 +16,16 @@
           "type": "developer-id",
           "required": false
         }
+      },
+      {
+        "platform": "windows",
+        "architecture": "x64",
+        "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.4.0/MyVibe-0.4.0-beta.1-win-x64.zip",
+        "sha256": "f8444e2acc8b65de0e3a01262b04c681f7d30d32afce9a2ac8fb61f8846085bb",
+        "signature": {
+          "type": "authenticode",
+          "required": false
+        }
       }
     ]
   },
