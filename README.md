@@ -28,9 +28,9 @@ MyVibe currently manages two plug-ins independently:
 
 Open [Releases](https://github.com/badrulmokhtar/myvibe/releases) and download the latest **MyVibe Windows x64** ZIP. Extract it to a writable user folder, run `MyVibe.exe`, and approve administrator access only when installing, updating, or removing a plug-in.
 
-MyVibe 0.3.1 can update all installed plug-ins from one action. It downloads and verifies every package before requesting one administrator approval.
+MyVibe 0.4.0 can update all installed plug-ins from one action. It downloads and verifies every package before requesting one administrator approval.
 
-> Upgrading from MyVibe 0.2? That version detects 0.3.1 but cannot replace its own unsigned executable. Download and extract 0.3.1 once. Future verified manager updates can install and restart in-app from MyVibe 0.3+.
+> Upgrading from MyVibe 0.2? Download and extract 0.4.0 once. Future verified manager updates can install and restart in-app from MyVibe 0.3+.
 
 > MyVibe is currently a beta. Windows may display an Unknown publisher warning until the production signing certificate is enabled. Beta limitations are always stated in the release notes.
 
@@ -46,20 +46,20 @@ Prefer a printable edition? [Download the PDF user guide](docs/MyVibe-and-2.5D-T
 
 | Component | Current support |
 | --- | --- |
-| Operating system | Windows 10/11 x64; macOS 13+ universal in the 0.4 beta candidate |
+| Operating system | Windows 10/11 x64; macOS 13+ universal |
 | Adobe application | Illustrator 2026, version 30.x |
-| MyVibe | 0.3.1 Windows beta; 0.4.0 macOS beta candidate |
+| MyVibe | 0.4.0 beta for Windows and macOS |
 | 2.5D Transform | 0.9.5 beta |
 | ToneMesh | 0.9.3 beta |
 
-MyVibe verifies [`catalog.json`](catalog.json) against [`catalog.json.sig`](catalog.json.sig), verifies package checksums, and retains the last verified catalog for offline use.
+MyVibe 0.4 verifies [`catalog-v2.json`](catalog-v2.json) against [`catalog-v2.json.sig`](catalog-v2.json.sig), verifies package checksums, and retains the last verified catalog for offline use.
 
 The existing signed v1 catalog remains the compatibility source for MyVibe
 0.3.x on Windows. [`catalog-v2.schema.json`](catalog-v2.schema.json) defines the
 cross-platform contract used by MyVibe 0.4+, with separate Windows and macOS
 artifacts and platform-appropriate Authenticode or Apple Developer ID policy.
-The live v2 catalog will be published only after the Mac manager and plug-in
-packages have final release URLs and hashes. Unsigned beta artifacts use
+The live v2 catalog contains the published Windows and macOS plug-in artifacts.
+Unsigned beta artifacts use
 `signature.required: false`; stable artifacts always require platform-trusted
 signatures and the expected publisher identity.
 

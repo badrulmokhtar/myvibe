@@ -1,4 +1,4 @@
-MyVibe 0.3.1 beta
+MyVibe 0.4.0 beta
 =================
 
 MyVibe installs, updates, and removes 2.5D Transform 0.9.5 and ToneMesh 0.9.3

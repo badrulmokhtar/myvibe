@@ -30,9 +30,9 @@ using Polyline = System.Windows.Shapes.Polyline;
 [assembly: AssemblyCompany("MyVibe")]
 [assembly: AssemblyProduct("MyVibe")]
 [assembly: AssemblyCopyright("Copyright 2026 MyVibe")]
-[assembly: AssemblyVersion("0.3.1.0")]
-[assembly: AssemblyFileVersion("0.3.1.0")]
-[assembly: AssemblyInformationalVersion("0.3.1")]
+[assembly: AssemblyVersion("0.4.0.0")]
+[assembly: AssemblyFileVersion("0.4.0.0")]
+[assembly: AssemblyInformationalVersion("0.4.0")]
 
 namespace MyVibe
 {
@@ -117,8 +117,11 @@ namespace MyVibe
                 bool catalogSignatureIsValid = CatalogClient.VerifyCatalogSignature(
                     System.Text.Encoding.UTF8.GetBytes("MyVibe catalog signature self-test"),
                     System.Text.Encoding.ASCII.GetBytes("tTc4JE4UZfJEFKdu0BY80q0MwDuTYG0K1BPnybwExKhK1G0xy4l0tpFd+rcBmu/s4UFAm6082lEz7S45y7N7w3eTSCEJpNzALsX2zL8vXM5HUUJn8rascoxsKWSmQUsw6UCQvVi5WT6mcJn1WKD0jHmD7lrX09t5m10YE40P7AV0SEdQrsuTPwtiPmB0IRwyvUHGclZ3MVv7EcCCLjIrS2aEo9oJ+oy/c+TUWGv0BQhqPY8BYIlOnGmbkM2bxBaqe3nzYTyEGR0E0n8+/nb2y6yNVvkg614o/67Kt/C6gfDTM/MliNGnFfDYIyR6F73THBo7n05pr1hTeV0DbChZg1lAiGvcLLylchUjzJiVJuKdv7F28sY1xklsDT2AJkdU77nXxBua8dHblT3/1i/oQwWNKjmsNxjvfl9bGUCFbv72SF+g+dMiiGeoTY/e8qF/PEgx46YvrVttfx1q64Kg/5ezyKWz5wdqYJjY9JHNkwaKJoFJVqrhbxE5xLVj6X1U"));
+                bool catalogV2SignatureIsValid = CatalogClient.VerifyCatalogV2Signature(
+                    System.Text.Encoding.UTF8.GetBytes("MyVibe catalog v2 signature self-test"),
+                    System.Text.Encoding.ASCII.GetBytes("qJT2aY5GS/t73NnN/OuEg6S/eYuFWFxHv3qsTsv2V5RdWc+6gAgzXrJJG75rK11GUeXZLvDV6ugL92UE4sdnfEhpzrWsKF0WFW00XbTA31HeM4RUv15k1dJwtrVbxVmL8XMfCne3U3ddAP8gGqze8b+LqZ+0Z0MBomtgm3izWHsFpmYzQHEkZuQ0alYEc4zI5LC3EYH5F9teNXbBf4ozrfHXnq9MY5dBYLb8ppTvsoAGY2QKmRmWufoQfGyn9CQeQrNwEWzS0lOcgXRI8MvtVwvmQs/3akpV/qJ08klqTo8bjqE1fOg8R059DIZRuVlxttKT4epO6ubfPJ0b74Je7+TqyW5eq+PE+HP8yxQlvgQ9x/zcDuDv2PE79r1OZORevxdg22utOeb3g2ShvPvsqxjScXk22SUM2NcCaBqLmJE8JKgnoMuyOjokcTKf/h/o3HgXY1PPgnrqiHMyXIf0LYMX7gdYSSB9tMV1lAzKFZRSJz3OB9IcX6OqpHI+nD18"));
                 bool valid = PluginInstaller.ValidatePayload(PluginRegistry.Transform2D5, out error)
-                    && pathsAreSafe && registryIsValid && releaseUrlsAreStrict && archivePathsAreSafe && manualVersionDetectionWorks && catalogSignatureIsValid;
+                    && pathsAreSafe && registryIsValid && releaseUrlsAreStrict && archivePathsAreSafe && manualVersionDetectionWorks && catalogSignatureIsValid && catalogV2SignatureIsValid;
                 if (!pathsAreSafe)
                     error = "administrator result-path validation failed";
                 else if (!registryIsValid)
@@ -130,7 +133,9 @@ namespace MyVibe
                 else if (!manualVersionDetectionWorks)
                     error = "manual plugin version detection failed";
                 else if (!catalogSignatureIsValid)
-                    error = "catalog signature validation failed";
+                    error = "catalog v1 signature validation failed";
+                else if (!catalogV2SignatureIsValid)
+                    error = "catalog v2 signature validation failed";
                 Console.WriteLine(valid ? "MyVibe self-test passed." : "MyVibe self-test failed: " + error);
                 Environment.ExitCode = valid ? 0 : 1;
                 return;
@@ -402,7 +407,7 @@ namespace MyVibe
                 CornerRadius = new CornerRadius(8),
                 Padding = new Thickness(10, 6, 10, 6),
                 VerticalAlignment = VerticalAlignment.Center,
-                Child = new TextBlock { Text = "MyVibe 0.3.1", Foreground = Muted, FontSize = 11 }
+                Child = new TextBlock { Text = "MyVibe 0.4.0", Foreground = Muted, FontSize = 11 }
             };
             Grid.SetColumn(version, 2);
             headerGrid.Children.Add(version);
@@ -2001,6 +2006,42 @@ namespace MyVibe
         public CatalogPackage[] plugins;
     }
 
+    internal sealed class PublicCatalogV2
+    {
+        public int schemaVersion;
+        public string channel;
+        public CatalogProductV2 manager;
+        public CatalogProductV2[] plugins;
+    }
+
+    internal sealed class CatalogProductV2
+    {
+        public string id;
+        public string name;
+        public string version;
+        public string description;
+        public string host;
+        public string hostVersion;
+        public string minimumManagerVersion;
+        public CatalogArtifactV2[] artifacts;
+    }
+
+    internal sealed class CatalogArtifactV2
+    {
+        public string platform;
+        public string architecture;
+        public string downloadUrl;
+        public string sha256;
+        public CatalogSignatureV2 signature;
+    }
+
+    internal sealed class CatalogSignatureV2
+    {
+        public string type;
+        public bool required;
+        public string signerThumbprint;
+    }
+
     internal sealed class CatalogPackage
     {
         public string id;
@@ -2027,16 +2068,21 @@ namespace MyVibe
 
     internal static class CatalogClient
     {
-        private const string CatalogUrl = "https://raw.githubusercontent.com/badrulmokhtar/myvibe/main/catalog.json";
-        private const string CatalogSignatureUrl = "https://raw.githubusercontent.com/badrulmokhtar/myvibe/main/catalog.json.sig";
-        private const string CurrentManagerVersion = "0.3.1";
+        private const string CatalogV2Url = "https://raw.githubusercontent.com/badrulmokhtar/myvibe/main/catalog-v2.json";
+        private const string CatalogV2SignatureUrl = "https://raw.githubusercontent.com/badrulmokhtar/myvibe/main/catalog-v2.json.sig";
+        private const string CatalogV1Url = "https://raw.githubusercontent.com/badrulmokhtar/myvibe/main/catalog.json";
+        private const string CatalogV1SignatureUrl = "https://raw.githubusercontent.com/badrulmokhtar/myvibe/main/catalog.json.sig";
+        private const string CurrentManagerVersion = "0.4.0";
         private const string TrustedReleasePath = "/badrulmokhtar/myvibe/releases/download/";
-        private const string CatalogPublicModulus = "yjcrH4sS/n+zyx4/RkZBc6WHTpzkBebMMRuHVSel+Llok5aeWJT8vCTOMsIUWf9pkMYn87tLzAO3iRTJPeF9FondJhzGqixpKzo1vhpxursq4AKbVpH8xDf39/RVkTIQOUxu7h1JlwenfAVwzVwXjngb0dV1i/16tiZHa00wllhJdhj80DM8kcp2XBmg9+wVMLS1JEQNTnhUUvkejsRTVytnvzogLNHzvkmCDEDeSzIn4j0lddeqEUbKYLSIO/A0xQhHkodgHoXym5/O0a6TC0NA0tUD43O6Hhlc9zOplliSP99dDVhAp9Kk+M1AwPRYqZHQL1qXMUpn2E16tTPhpS011ee96Rf2IFF7YhOo02RHsOlhY9U7eDPg0BGykWGZ+nDYrvGImPJNlz2faVVhhIBTzrtTcJmQVQdpyqDlHFzscCP2vHFKEZIkVT7u3ZmX2Y+Ct+fjrimelAH+weQ5aqN9Zjrx2fNs4lYb/CHceUq1blqyAzBD4nao1JUg4jxB";
+        private const string CatalogV1PublicModulus = "yjcrH4sS/n+zyx4/RkZBc6WHTpzkBebMMRuHVSel+Llok5aeWJT8vCTOMsIUWf9pkMYn87tLzAO3iRTJPeF9FondJhzGqixpKzo1vhpxursq4AKbVpH8xDf39/RVkTIQOUxu7h1JlwenfAVwzVwXjngb0dV1i/16tiZHa00wllhJdhj80DM8kcp2XBmg9+wVMLS1JEQNTnhUUvkejsRTVytnvzogLNHzvkmCDEDeSzIn4j0lddeqEUbKYLSIO/A0xQhHkodgHoXym5/O0a6TC0NA0tUD43O6Hhlc9zOplliSP99dDVhAp9Kk+M1AwPRYqZHQL1qXMUpn2E16tTPhpS011ee96Rf2IFF7YhOo02RHsOlhY9U7eDPg0BGykWGZ+nDYrvGImPJNlz2faVVhhIBTzrtTcJmQVQdpyqDlHFzscCP2vHFKEZIkVT7u3ZmX2Y+Ct+fjrimelAH+weQ5aqN9Zjrx2fNs4lYb/CHceUq1blqyAzBD4nao1JUg4jxB";
+        private const string CatalogV2PublicModulus = "qbFAZN9zfMnhezGb94F7uYNfOOPqCaybZ22EM4XamudRb9QSIsGxwhZ5nJCxMqtCMkzgVTV0EcWGK5sJTpMBASD8ai8ZkyFFd6HIur6jjf7JeuELtzG4QtOE6cBtcQpTZPoYDpJjhqfiRs3BnBgdFdydWJp7msFrbs0UH7yxY03fAZKKD3BDjE0+NKOjir2okTbjO8KJQjUf3mE+YrrAfN/gLfjRyYLv3NSKEDf9Mor87XnHDfulhSawp72BIlmKEI4UtFHxai2lv4ei+K8jwtID+SKxz/Xb19C3hX2L5/uIAft56FPex+1W49mTbq76kXJdgfPgqoaPQnTi28KCFCEgl+ngvkkZpoF1/A+v2Rnc25VchlFLRwWST8LA8VSt0mag2tANBeKjo1vl3lLkJmyz5S+2ddWiMTUtoZQThjSZjHRYgKAdl1DwEez9kww5ioVkrzKo5n7duooh4DMhEiY9YNLapchuksofpPxrexcdNkJgRvB8xMnSDRpxo+lJ";
         private const string CatalogPublicExponent = "AQAB";
         private const int MaxCatalogBytes = 1024 * 1024;
         private const int MaxSignatureBytes = 16 * 1024;
         private const int MaxPackageBytes = 250 * 1024 * 1024;
         internal static readonly string DownloadsRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MyVibe", "downloads");
+        private static readonly string CachedCatalogV2Path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MyVibe", "catalog-v2.json");
+        private static readonly string CachedSignatureV2Path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MyVibe", "catalog-v2.json.sig");
         private static readonly string CachedCatalogPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MyVibe", "catalog.json");
         private static readonly string CachedSignaturePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MyVibe", "catalog.json.sig");
 
@@ -2046,28 +2092,49 @@ namespace MyVibe
             {
                 try
                 {
-                    byte[] catalogBytes;
-                    byte[] signatureBytes;
-                    using (WebClient client = CreateClient())
-                    {
-                        catalogBytes = await client.DownloadDataTaskAsync(new Uri(CatalogUrl));
-                        signatureBytes = await client.DownloadDataTaskAsync(new Uri(CatalogSignatureUrl));
-                    }
-                    PublicCatalog downloaded = ParseAndValidateVerified(catalogBytes, signatureBytes);
-                    Directory.CreateDirectory(Path.GetDirectoryName(CachedCatalogPath));
-                    File.WriteAllBytes(CachedCatalogPath, catalogBytes);
-                    File.WriteAllBytes(CachedSignaturePath, signatureBytes);
+                    PublicCatalog downloaded = await DownloadAndCache(CatalogV2Url, CatalogV2SignatureUrl, CachedCatalogV2Path, CachedSignatureV2Path);
                     return BuildResult(downloaded, false);
                 }
                 catch
                 {
-                    return BuildResult(LoadVerifiedCachedCatalog(), true);
+                    try
+                    {
+                        return BuildResult(LoadVerified(CachedCatalogV2Path, CachedSignatureV2Path), true);
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            PublicCatalog legacy = await DownloadAndCache(CatalogV1Url, CatalogV1SignatureUrl, CachedCatalogPath, CachedSignaturePath);
+                            return BuildResult(legacy, false);
+                        }
+                        catch
+                        {
+                            return BuildResult(LoadVerified(CachedCatalogPath, CachedSignaturePath), true);
+                        }
+                    }
                 }
             }
             catch
             {
                 return new CatalogCheckResult { Message = "Unable to verify the update catalog. The bundled 2.5D Transform installer remains available offline." };
             }
+        }
+
+        private static async Task<PublicCatalog> DownloadAndCache(string catalogUrl, string signatureUrl, string catalogPath, string signaturePath)
+        {
+            byte[] catalogBytes;
+            byte[] signatureBytes;
+            using (WebClient client = CreateClient())
+            {
+                catalogBytes = await client.DownloadDataTaskAsync(new Uri(catalogUrl));
+                signatureBytes = await client.DownloadDataTaskAsync(new Uri(signatureUrl));
+            }
+            PublicCatalog downloaded = ParseAndValidateVerified(catalogBytes, signatureBytes);
+            Directory.CreateDirectory(Path.GetDirectoryName(catalogPath));
+            File.WriteAllBytes(catalogPath, catalogBytes);
+            File.WriteAllBytes(signaturePath, signatureBytes);
+            return downloaded;
         }
 
         internal static async Task<OperationResult> DownloadPluginAsync(CatalogPackage package)
@@ -2170,6 +2237,7 @@ namespace MyVibe
                 PublicCatalog catalog = LoadVerifiedCachedCatalog();
                 CatalogPackage package = catalog.manager;
                 return candidate != null
+                    && package != null
                     && String.Equals(package.id, candidate.id, StringComparison.OrdinalIgnoreCase)
                     && String.Equals(package.version, candidate.version, StringComparison.OrdinalIgnoreCase)
                     && String.Equals(package.sha256, candidate.sha256, StringComparison.OrdinalIgnoreCase)
@@ -2210,7 +2278,7 @@ namespace MyVibe
                 else
                     messages.Add(installed == null ? definition.Name + " is available." : definition.Name + " is up to date.");
             }
-            result.ManagerUpdate = IsNewer(catalog.manager.version, CurrentManagerVersion) ? catalog.manager : null;
+            result.ManagerUpdate = catalog.manager != null && IsNewer(catalog.manager.version, CurrentManagerVersion) ? catalog.manager : null;
             if (result.ManagerUpdate != null)
                 messages.Add("MyVibe " + result.ManagerUpdate.version + " is available.");
             else
@@ -2224,28 +2292,128 @@ namespace MyVibe
         private static PublicCatalog ParseAndValidateVerified(byte[] catalogBytes, byte[] signatureBytes)
         {
             if (catalogBytes == null || catalogBytes.Length == 0 || catalogBytes.Length > MaxCatalogBytes
-                || signatureBytes == null || signatureBytes.Length == 0 || signatureBytes.Length > MaxSignatureBytes
-                || !VerifyCatalogSignature(catalogBytes, signatureBytes))
-                throw new InvalidDataException("The catalog signature is invalid.");
+                || signatureBytes == null || signatureBytes.Length == 0 || signatureBytes.Length > MaxSignatureBytes)
+                throw new InvalidDataException("The catalog file size is invalid.");
             string json = new System.Text.UTF8Encoding(false, true).GetString(catalogBytes);
             JavaScriptSerializer serializer = new JavaScriptSerializer { MaxJsonLength = MaxCatalogBytes };
-            PublicCatalog catalog = serializer.Deserialize<PublicCatalog>(json);
-            if (catalog == null || catalog.schemaVersion != 1 || catalog.manager == null || catalog.plugins == null || catalog.plugins.Length == 0)
+            PublicCatalog probe = serializer.Deserialize<PublicCatalog>(json);
+            if (probe == null)
                 throw new InvalidDataException("The catalog structure is invalid.");
-            ValidatePackage(catalog.manager);
-            foreach (CatalogPackage package in catalog.plugins)
-                ValidatePackage(package);
-            return catalog;
+            if (probe.schemaVersion == 2)
+            {
+                if (!VerifyCatalogV2Signature(catalogBytes, signatureBytes))
+                    throw new InvalidDataException("The catalog v2 signature is invalid.");
+                return ConvertCatalogV2(serializer.Deserialize<PublicCatalogV2>(json));
+            }
+            if (probe.schemaVersion == 1)
+            {
+                if (!VerifyCatalogSignature(catalogBytes, signatureBytes))
+                    throw new InvalidDataException("The catalog v1 signature is invalid.");
+                if (probe.manager == null || probe.plugins == null || probe.plugins.Length == 0)
+                    throw new InvalidDataException("The catalog structure is invalid.");
+                ValidatePackage(probe.manager);
+                foreach (CatalogPackage package in probe.plugins)
+                    ValidatePackage(package);
+                return probe;
+            }
+            throw new InvalidDataException("The catalog schema is unsupported.");
+        }
+
+        private static PublicCatalog ConvertCatalogV2(PublicCatalogV2 source)
+        {
+            Version managerVersion;
+            if (source == null || source.schemaVersion != 2 || !String.Equals(source.channel, "beta", StringComparison.OrdinalIgnoreCase) && !String.Equals(source.channel, "stable", StringComparison.OrdinalIgnoreCase)
+                || source.manager == null || !String.Equals(source.manager.id, "com.badru.myvibe", StringComparison.OrdinalIgnoreCase)
+                || !Version.TryParse(source.manager.version, out managerVersion) || source.plugins == null || source.plugins.Length == 0)
+                throw new InvalidDataException("The catalog v2 structure is invalid.");
+
+            PublicCatalog converted = new PublicCatalog { schemaVersion = 2, channel = source.channel };
+            converted.manager = WindowsPackage(source.manager, source.channel, false);
+            List<CatalogPackage> plugins = new List<CatalogPackage>();
+            HashSet<string> identifiers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { source.manager.id };
+            foreach (CatalogProductV2 product in source.plugins)
+            {
+                Version minimumManagerVersion;
+                if (product == null || !identifiers.Add(product.id ?? String.Empty)
+                    || !String.Equals(product.host, "Adobe Illustrator", StringComparison.Ordinal)
+                    || !String.Equals(product.hostVersion, "30.x", StringComparison.Ordinal)
+                    || !Version.TryParse(product.minimumManagerVersion, out minimumManagerVersion)
+                    || IsNewer(product.minimumManagerVersion, CurrentManagerVersion))
+                    throw new InvalidDataException("A catalog v2 plug-in is incompatible with this MyVibe version.");
+                CatalogPackage package = WindowsPackage(product, source.channel, true);
+                plugins.Add(package);
+            }
+            foreach (PluginDefinition definition in PluginRegistry.All)
+                if (!plugins.Any(delegate(CatalogPackage package) { return String.Equals(package.id, definition.Id, StringComparison.OrdinalIgnoreCase); }))
+                    throw new InvalidDataException(definition.Name + " is missing from catalog v2.");
+            converted.plugins = plugins.ToArray();
+            return converted;
+        }
+
+        private static CatalogPackage WindowsPackage(CatalogProductV2 product, string channel, bool required)
+        {
+            Version version;
+            if (product == null || String.IsNullOrWhiteSpace(product.id) || String.IsNullOrWhiteSpace(product.name)
+                || !Version.TryParse(product.version, out version) || product.artifacts == null)
+                throw new InvalidDataException("A catalog v2 product has invalid metadata.");
+            CatalogArtifactV2 artifact = product.artifacts.SingleOrDefault(delegate(CatalogArtifactV2 item)
+            {
+                return item != null && String.Equals(item.platform, "windows", StringComparison.OrdinalIgnoreCase)
+                    && String.Equals(item.architecture, "x64", StringComparison.OrdinalIgnoreCase);
+            });
+            if (artifact == null)
+            {
+                if (required)
+                    throw new InvalidDataException(product.name + " has no Windows x64 package.");
+                return null;
+            }
+            if (artifact.signature == null || !String.Equals(artifact.signature.type, "authenticode", StringComparison.OrdinalIgnoreCase)
+                || String.Equals(channel, "stable", StringComparison.OrdinalIgnoreCase) && !artifact.signature.required
+                || artifact.signature.required && !Regex.IsMatch(artifact.signature.signerThumbprint ?? String.Empty, "^[a-fA-F0-9]{40,64}$"))
+                throw new InvalidDataException(product.name + " has an invalid Windows signature policy.");
+            CatalogPackage package = new CatalogPackage
+            {
+                id = product.id,
+                name = product.name,
+                version = product.version,
+                platform = artifact.platform,
+                architecture = artifact.architecture,
+                downloadUrl = artifact.downloadUrl,
+                sha256 = artifact.sha256,
+                authenticodeRequired = artifact.signature.required,
+                signerThumbprint = artifact.signature.signerThumbprint,
+                host = product.host,
+                hostVersion = product.hostVersion,
+                minimumManagerVersion = product.minimumManagerVersion
+            };
+            ValidatePackage(package);
+            return package;
         }
 
         private static PublicCatalog LoadVerifiedCachedCatalog()
         {
-            if (!File.Exists(CachedCatalogPath) || !File.Exists(CachedSignaturePath))
+            try { return LoadVerified(CachedCatalogV2Path, CachedSignatureV2Path); }
+            catch { return LoadVerified(CachedCatalogPath, CachedSignaturePath); }
+        }
+
+        private static PublicCatalog LoadVerified(string catalogPath, string signaturePath)
+        {
+            if (!File.Exists(catalogPath) || !File.Exists(signaturePath))
                 throw new FileNotFoundException("A verified catalog has not been cached yet.");
-            return ParseAndValidateVerified(File.ReadAllBytes(CachedCatalogPath), File.ReadAllBytes(CachedSignaturePath));
+            return ParseAndValidateVerified(File.ReadAllBytes(catalogPath), File.ReadAllBytes(signaturePath));
         }
 
         internal static bool VerifyCatalogSignature(byte[] catalogBytes, byte[] encodedSignature)
+        {
+            return VerifyCatalogSignatureWithKey(catalogBytes, encodedSignature, CatalogV1PublicModulus);
+        }
+
+        internal static bool VerifyCatalogV2Signature(byte[] catalogBytes, byte[] encodedSignature)
+        {
+            return VerifyCatalogSignatureWithKey(catalogBytes, encodedSignature, CatalogV2PublicModulus);
+        }
+
+        private static bool VerifyCatalogSignatureWithKey(byte[] catalogBytes, byte[] encodedSignature, string modulus)
         {
             try
             {
@@ -2254,7 +2422,7 @@ namespace MyVibe
                 {
                     rsa.ImportParameters(new RSAParameters
                     {
-                        Modulus = Convert.FromBase64String(CatalogPublicModulus),
+                        Modulus = Convert.FromBase64String(modulus),
                         Exponent = Convert.FromBase64String(CatalogPublicExponent)
                     });
                     return rsa.VerifyData(catalogBytes, CryptoConfig.MapNameToOID("SHA256"), signature);
@@ -2340,7 +2508,7 @@ namespace MyVibe
                 string partial = archive + ".partial";
                 using (WebClient client = new WebClient())
                 {
-                    client.Headers[HttpRequestHeader.UserAgent] = "MyVibe/0.3.1";
+                    client.Headers[HttpRequestHeader.UserAgent] = "MyVibe/0.4.0";
                     await client.DownloadFileTaskAsync(new Uri(package.downloadUrl), partial);
                 }
                 FileInfo managerArchive = new FileInfo(partial);
