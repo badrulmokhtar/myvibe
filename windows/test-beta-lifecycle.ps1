@@ -1,7 +1,8 @@
 param(
     [string]$ArchivePath,
     [string]$CatalogPath,
-    [string]$CatalogSignaturePath
+    [string]$CatalogSignaturePath,
+    [string]$PreviewPath
 )
 
 $ErrorActionPreference = 'Stop'
@@ -50,6 +51,7 @@ try {
     if ($previewTest.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $preview) -or (Get-Item -LiteralPath $preview).Length -eq 0) {
         throw 'MyVibe could not render its main window in the isolated test profile.'
     }
+    if (-not [string]::IsNullOrWhiteSpace($PreviewPath)) { Copy-Item -LiteralPath $preview -Destination $PreviewPath }
 
     [pscustomobject]@{
         Result = 'Passed'

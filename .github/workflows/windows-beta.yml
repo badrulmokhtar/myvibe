@@ -35,7 +35,7 @@ jobs:
         run: |
           powershell -NoProfile -ExecutionPolicy Bypass -File windows\build-release.ps1
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          powershell -NoProfile -ExecutionPolicy Bypass -File windows\test-beta-lifecycle.ps1
+          powershell -NoProfile -ExecutionPolicy Bypass -File windows\test-beta-lifecycle.ps1 -PreviewPath windows\dist\myvibe-windows.png
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Upload verified manager ZIP
@@ -45,4 +45,5 @@ jobs:
           path: |
             windows/dist/MyVibe-0.4.0-beta.1-win-x64.zip
             windows/dist/MyVibe-0.4.0-beta.1-win-x64.zip.sha256
+            windows/dist/myvibe-windows.png
           if-no-files-found: error
