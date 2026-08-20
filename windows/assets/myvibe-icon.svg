@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">MyVibe</title>
+  <rect x="8" y="8" width="240" height="240" rx="56" fill="#11151b"/>
+  <path d="M54 180V70l74 82 74-82v110" fill="none" stroke="#4b9cff" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="54" cy="70" r="11" fill="#8bd5ff"/>
+  <circle cx="202" cy="70" r="11" fill="#8bd5ff"/>
+</svg>
