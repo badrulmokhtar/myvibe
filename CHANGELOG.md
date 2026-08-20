@@ -2,6 +2,25 @@
 
 All notable public changes are documented here. Releases follow semantic versioning.
 
+## [0.4.0] - 2026-08-21
+
+### Added
+
+- Universal macOS manager for Apple silicon and Intel Macs.
+- Shared signed catalog with Windows x64 and macOS universal artifacts.
+- Automatic catalog loading, verified cache fallback, and independent install, repair, update, and removal for 2.5D Transform and ToneMesh.
+- Repeatable Windows CI build with catalog, lifecycle, and UI-render checks.
+
+### Changed
+
+- Windows manager now uses the v2 catalog while retaining v1 verification for rollback compatibility.
+- GitHub release provides matching Windows and macOS 0.4 beta downloads.
+
+### Security
+
+- Windows and macOS select only their matching catalog artifact and verify its official release URL and SHA-256.
+- Stable catalog entries require Authenticode or Apple Developer ID; unsigned beta entries require explicit user consent.
+
 ## [0.3.1] - 2026-08-15
 
 ### Added

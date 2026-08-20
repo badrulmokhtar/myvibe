@@ -2,7 +2,7 @@
 
 This guide explains how to install, update, remove, and recover **2.5D Transform** and **ToneMesh** with **MyVibe**, then covers the complete 2.5D Transform workflow inside Adobe Illustrator.
 
-> Current beta compatibility: Windows 10 or Windows 11, x64; Adobe Illustrator 2026, version 30.x; MyVibe 0.3.1; 2.5D Transform 0.9.5; ToneMesh 0.9.3.
+> Current beta compatibility: Windows 10/11 x64 or macOS 13+ universal; Adobe Illustrator 2026, version 30.x; MyVibe 0.4.0; 2.5D Transform 0.9.5; ToneMesh 0.9.3. Installation steps below cover Windows; see [Unsigned beta installation](UNSIGNED-BETA.md) for macOS opening instructions.
 
 [Download the PDF edition](MyVibe-and-2.5D-Transform-User-Guide.pdf)
 
@@ -26,7 +26,7 @@ This guide explains how to install, update, remove, and recover **2.5D Transform
 
 ## 1. What you are installing
 
-MyVibe is a Windows manager for creative plug-ins. It installs both parts required by 2.5D Transform and ToneMesh:
+MyVibe manages creative plug-ins on Windows and macOS. It installs both parts required by 2.5D Transform and ToneMesh:
 
 - The native `.aip` engine that performs the Illustrator transformation.
 - The CEP interface that provides the main panel and Linked Groups panel.
@@ -133,8 +133,6 @@ The effect updates live. Values are absolute, so moving a value from 50 back to 
 | Rotate Z | Rolls artwork clockwise or counterclockwise |
 | Perspective / Depth | Controls perspective strength from 0 to 100 |
 | Orbit cube | Adjusts X and Y together; Shift-drag adjusts roll |
-
-![Linked artwork using a shared 2.5D transformation in Illustrator](../assets/plugin-in-illustrator.png)
 
 ## 7. Work with multiple objects
 

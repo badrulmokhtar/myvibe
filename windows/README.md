@@ -1,4 +1,4 @@
-# MyVibe 0.3.1
+# MyVibe 0.4.0
 
 MyVibe is a dependency-free Windows manager for **2.5D Transform 0.9.5** and **ToneMesh 0.9.3** for Adobe Illustrator 2026.
 
@@ -53,7 +53,7 @@ powershell -ExecutionPolicy Bypass -File .\myvibe\build-release.ps1
 
 ## Upgrading from 0.2
 
-MyVibe 0.2 detects the newer manager but does not replace its own unsigned executable. Download MyVibe 0.3.1 from the official GitHub release, extract it to a writable user folder, and run `MyVibe.exe`. Starting with 0.3, future verified manager updates can install and restart in-app.
+MyVibe 0.2 detects the newer manager but does not replace its own unsigned executable. Download MyVibe 0.4.0 from the official GitHub release, extract it to a writable user folder, and run `MyVibe.exe`. Starting with 0.3, future verified manager updates can install and restart in-app.
 
 ## Release verification
 
@@ -67,4 +67,4 @@ The automated test does not alter an Illustrator installation. Complete the real
 
 Stable packaging is blocked until `MyVibe.exe` has a valid Authenticode signature. See `STABLE-SIGNING.md`.
 
-The catalog signing private key stays outside the source and distribution repositories. Run `sign-catalog.ps1` only from the release workspace, then publish `catalog.json` and `catalog.json.sig` together.
+The catalog signing private key stays outside the source and distribution repositories. MyVibe 0.4 prefers the cross-platform signed `catalog-v2.json` feed and retains signed v1 support for rollback compatibility. Publish a catalog and its matching signature together.
