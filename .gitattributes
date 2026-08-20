@@ -7,3 +7,5 @@ catalog-v2.json text eol=lf
 catalog-v2.json.sig text eol=lf
 catalog-v2.schema.json text eol=lf
 tools/verify-catalog-v2.mjs text eol=lf
+windows/catalog.test.json text eol=lf
+windows/catalog.test.json.sig text eol=lf
