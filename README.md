@@ -29,7 +29,7 @@ SHA-256 files are published beside both downloads on the [release page](https://
 ## Managed plug-ins
 
 - **2.5D Transform 0.9.5** — editable X/Y/Z rotation and perspective views for Illustrator artwork.
-- **ToneMesh 0.9.3** — editable tone-driven vector fields with custom marks, structures, and contour handling.
+- **ToneMesh 0.9.7** — editable tone-driven vector fields with custom marks, structures, and contour handling.
 
 Each plug-in can be installed, updated, repaired, or removed independently.
 
@@ -50,7 +50,7 @@ Each plug-in can be installed, updated, repaired, or removed independently.
 | Adobe application | Illustrator 2026, version 30.x |
 | MyVibe | 0.4.0 beta |
 | 2.5D Transform | 0.9.5 beta |
-| ToneMesh | 0.9.3 beta |
+| ToneMesh | 0.9.7 beta |
 
 ## Documentation
 

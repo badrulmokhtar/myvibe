@@ -242,7 +242,7 @@ namespace MyVibe
             "2.5D Transform.aip", "2.5D Transform", "transform2d5.version", "ILST_*_com.badru.transform2d5.*", "MyVibe.Transform2D5.zip", false);
 
         internal static readonly PluginDefinition ToneMesh = new PluginDefinition(
-            "com.badru.tonemesh", "ToneMesh", "0.9.3",
+            "com.badru.tonemesh", "ToneMesh", "0.9.7",
             "Build editable halftone fields from solid fills, gradients, mesh gradients, and custom marks.",
             "Editable tone-driven vector fields with custom structures, marks, appearance handles, and contour wrapping.",
             "ToneMesh.aip", "ToneMesh", "tonemesh.version", "ILST_*_com.badru.tonemesh.*", null, true);
