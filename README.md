@@ -40,8 +40,7 @@ Each plug-in can be installed, updated, repaired, or removed independently.
 | Plug-in library and 2.5D details | ToneMesh details |
 | --- | --- |
 | <img src="assets/showcase/myvibe-overview.png" alt="MyVibe plug-in library and 2.5D Transform details" width="100%"> | <img src="assets/showcase/myvibe-tonemesh.png" alt="MyVibe ToneMesh details" width="100%"> |
-| **Responsive manager** | **Verified installation workflow** |
-| <img src="assets/showcase/myvibe-compact.png" alt="MyVibe compact responsive layout" width="100%"> | <img src="assets/myvibe-app.png" alt="MyVibe verified installation interface" width="100%"> |
+<p align="center"><strong>Responsive manager</strong><br><img src="assets/showcase/myvibe-compact.png" alt="MyVibe compact responsive layout" width="74%"></p>
 
 ### ToneMesh
 
