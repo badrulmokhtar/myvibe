@@ -154,6 +154,8 @@ namespace MyVibe
             {
                 Application previewApp = new Application();
                 ManagerWindow preview = new ManagerWindow();
+                if (args.Length > 4)
+                    preview.SelectPreviewPlugin(args[4]);
                 int previewWidth;
                 int previewHeight;
                 if (args.Length > 3 && Int32.TryParse(args[2], out previewWidth) && Int32.TryParse(args[3], out previewHeight))
@@ -242,7 +244,7 @@ namespace MyVibe
             "2.5D Transform.aip", "2.5D Transform", "transform2d5.version", "ILST_*_com.badru.transform2d5.*", "MyVibe.Transform2D5.zip", false);
 
         internal static readonly PluginDefinition ToneMesh = new PluginDefinition(
-            "com.badru.tonemesh", "ToneMesh", "0.9.7",
+            "com.badru.tonemesh", "ToneMesh", "0.9.8",
             "Build editable halftone fields from solid fills, gradients, mesh gradients, and custom marks.",
             "Editable tone-driven vector fields with custom structures, marks, appearance handles, and contour wrapping.",
             "ToneMesh.aip", "ToneMesh", "tonemesh.version", "ILST_*_com.badru.tonemesh.*", null, true);
@@ -372,6 +374,13 @@ namespace MyVibe
                 if (!String.IsNullOrEmpty(Program.PendingHealthPath))
                     ManagerUpdates.MarkHealthy(Program.PendingHealthPath);
             };
+        }
+
+        internal void SelectPreviewPlugin(string pluginId)
+        {
+            PluginDefinition plugin = PluginRegistry.Find(pluginId);
+            if (plugin != null)
+                SelectPlugin(plugin, false);
         }
 
         private Border BuildHeader()

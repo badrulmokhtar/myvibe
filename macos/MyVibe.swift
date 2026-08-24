@@ -23,7 +23,7 @@ struct RegistryProduct {
 enum Registry {
     static let products = [
         RegistryProduct(id: "com.badru.transform2d5", name: "2.5D Transform", version: "0.9.5", description: "Non-destructive 2.5D transforms for Adobe Illustrator.", nativeName: "2.5D Transform.aip", cepName: "2.5D Transform"),
-        RegistryProduct(id: "com.badru.tonemesh", name: "ToneMesh", version: "0.9.7", description: "Editable tone-driven vector fields for Adobe Illustrator.", nativeName: "ToneMesh.aip", cepName: "ToneMesh")
+        RegistryProduct(id: "com.badru.tonemesh", name: "ToneMesh", version: "0.9.8", description: "Editable tone-driven vector fields for Adobe Illustrator.", nativeName: "ToneMesh.aip", cepName: "ToneMesh")
     ]
 
     static func product(id: String) -> RegistryProduct? { products.first { $0.id == id } }

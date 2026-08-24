@@ -29,9 +29,35 @@ SHA-256 files are published beside both downloads on the [release page](https://
 ## Managed plug-ins
 
 - **2.5D Transform 0.9.5** — editable X/Y/Z rotation and perspective views for Illustrator artwork.
-- **ToneMesh 0.9.7** — editable tone-driven vector fields with custom marks, structures, and contour handling.
+- **ToneMesh 0.9.8** — editable tone-driven vector fields with global or per-point paint, custom marks, structures, and contour handling.
 
 Each plug-in can be installed, updated, repaired, or removed independently.
+
+## Product showcase
+
+### MyVibe
+
+| Plug-in library and 2.5D details | ToneMesh details |
+| --- | --- |
+| <img src="assets/showcase/myvibe-overview.png" alt="MyVibe plug-in library and 2.5D Transform details" width="100%"> | <img src="assets/showcase/myvibe-tonemesh.png" alt="MyVibe ToneMesh details" width="100%"> |
+| **Responsive manager** | **Verified installation workflow** |
+| <img src="assets/showcase/myvibe-compact.png" alt="MyVibe compact responsive layout" width="100%"> | <img src="assets/myvibe-app.png" alt="MyVibe verified installation interface" width="100%"> |
+
+### ToneMesh
+
+| Compact panel | Standard panel |
+| --- | --- |
+| <img src="assets/showcase/tonemesh-compact.png" alt="ToneMesh compact panel with global paint controls" width="100%"> | <img src="assets/showcase/tonemesh-standard.png" alt="ToneMesh standard panel with mesh controls" width="100%"> |
+| **Narrow dock** | **Wide workspace** |
+| <img src="assets/showcase/tonemesh-narrow.png" alt="ToneMesh narrow dock layout" width="100%"> | <img src="assets/showcase/tonemesh-wide.png" alt="ToneMesh wide panel layout" width="100%"> |
+
+### 2.5D Transform
+
+| Transform workspace | Compact panel |
+| --- | --- |
+| <img src="assets/showcase/transform2d5-overview.png" alt="2.5D Transform workspace" width="100%"> | <img src="assets/showcase/transform2d5-compact.png" alt="2.5D Transform compact panel" width="100%"> |
+| **Preset browser** | **Linked transform group** |
+| <img src="assets/showcase/transform2d5-presets.png" alt="2.5D Transform preset browser" width="100%"> | <img src="assets/showcase/transform2d5-linked.png" alt="2.5D Transform linked group controls" width="100%"> |
 
 ## What MyVibe checks
 
@@ -50,7 +76,7 @@ Each plug-in can be installed, updated, repaired, or removed independently.
 | Adobe application | Illustrator 2026, version 30.x |
 | MyVibe | 0.4.0 beta |
 | 2.5D Transform | 0.9.5 beta |
-| ToneMesh | 0.9.7 beta |
+| ToneMesh | 0.9.8 beta |
 
 ## Documentation
 
