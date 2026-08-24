@@ -37,6 +37,9 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           powershell -NoProfile -ExecutionPolicy Bypass -File windows\test-beta-lifecycle.ps1 -PreviewPath windows\dist\myvibe-windows.png
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          windows\bin\MyVibe.exe --screenshot windows\dist\myvibe-overview.png 1080 720 com.badru.transform2d5
+          windows\bin\MyVibe.exe --screenshot windows\dist\myvibe-tonemesh.png 1080 720 com.badru.tonemesh
+          windows\bin\MyVibe.exe --screenshot windows\dist\myvibe-compact.png 760 680 com.badru.tonemesh
 
       - name: Upload verified manager ZIP
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -46,4 +49,7 @@ jobs:
             windows/dist/MyVibe-0.4.0-beta.1-win-x64.zip
             windows/dist/MyVibe-0.4.0-beta.1-win-x64.zip.sha256
             windows/dist/myvibe-windows.png
+            windows/dist/myvibe-overview.png
+            windows/dist/myvibe-tonemesh.png
+            windows/dist/myvibe-compact.png
           if-no-files-found: error

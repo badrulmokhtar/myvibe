@@ -1,6 +1,6 @@
 # MyVibe 0.4.0
 
-MyVibe is a dependency-free Windows manager for **2.5D Transform 0.9.5** and **ToneMesh 0.9.3** for Adobe Illustrator 2026.
+MyVibe is a dependency-free Windows manager for **2.5D Transform 0.9.5** and **ToneMesh 0.9.8** for Adobe Illustrator 2026.
 
 ## Build
 

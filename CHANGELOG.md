@@ -15,6 +15,8 @@ All notable public changes are documented here. Releases follow semantic version
 
 - Windows manager now uses the v2 catalog while retaining v1 verification for rollback compatibility.
 - GitHub release provides matching Windows and macOS 0.4 beta downloads.
+- ToneMesh catalog and built-in manager registry now provide 0.9.8 for Windows x64 and macOS universal.
+- Product showcase galleries now include three to four real UI screenshots each for MyVibe, ToneMesh, and 2.5D Transform.
 
 ### Security
 
