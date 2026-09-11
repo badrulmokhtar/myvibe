@@ -98,7 +98,7 @@ MyVibe 0.2 detects the current manager but cannot replace its own unsigned execu
 7. Wait for the success message. Do not open Illustrator while installation is in progress.
 8. Start Illustrator after MyVibe confirms that installation is complete.
 
-MyVibe installs the selected native engine and CEP interface together when the plug-in has a native engine. 2.5D Transform can be installed from the bundled offline payload; ToneMesh and Logolize use the verified online catalog. Logolize is CEP-only. Avoid manually mixing files from different releases.
+MyVibe installs the selected native engine and CEP interface together when the plug-in has a native engine. All three plug-ins use the verified online catalog; Logolize is CEP-only. Avoid manually mixing files from different releases.
 
 ## 5. Open the plug-in in Illustrator
 
