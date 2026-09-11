@@ -247,7 +247,7 @@ namespace MyVibe
 
         internal static readonly PluginDefinition ToneMesh = new PluginDefinition(
             "com.badru.tonemesh", "ToneMesh", "0.9.9",
-            "Build editable halftone fields from solid fills, gradients, mesh gradients, and custom marks.",
+            "Build editable halftone fields with custom marks while pausing hidden-panel monitoring to keep Illustrator responsive.",
             "Editable tone-driven vector fields with custom structures, marks, appearance handles, and contour wrapping.",
             "ToneMesh.aip", "ToneMesh", "tonemesh.version", "ILST_*_com.badru.tonemesh.*", null, true);
 

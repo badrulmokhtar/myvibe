@@ -64,8 +64,8 @@
     {
       "id": "com.badru.tonemesh",
       "name": "ToneMesh",
-      "version": "0.9.8",
-      "description": "Build editable halftone fields from solid fills, gradients, mesh gradients, and custom marks.",
+      "version": "0.9.9",
+      "description": "Build editable halftone fields with custom marks while pausing hidden-panel selection monitoring to keep Illustrator responsive.",
       "host": "Adobe Illustrator",
       "hostVersion": "30.x",
       "minimumManagerVersion": "0.4.0",
@@ -73,8 +73,8 @@
         {
           "platform": "macos",
           "architecture": "universal",
-          "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/tonemesh-v0.9.8/ToneMesh-0.9.8-beta-macos-universal.zip",
-          "sha256": "5683239e2d905cd6eb94cfa29c07207a1cd657aefe2a23d96598cd7fbf672f19",
+          "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/tonemesh-v0.9.9/ToneMesh-0.9.9-beta-macos-universal.zip",
+          "sha256": "ef7a73f32c11017632d7df337c7fdc43ed0b933dd5e3a503c0bb6c4c0bbfddfc",
           "signature": {
             "type": "developer-id",
             "required": false
@@ -83,12 +83,54 @@
         {
           "platform": "windows",
           "architecture": "x64",
-          "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/tonemesh-v0.9.8/ToneMesh-0.9.8-beta-win-x64.zip",
-          "sha256": "ff87b3c97f3c27b8ad4ec8989f6b24be205422506c12d4d7883f0a4556f514c4",
+          "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/tonemesh-v0.9.9/ToneMesh-0.9.9-beta-win-x64.zip",
+          "sha256": "94f56c2d0a7c1fa4412357a9669d9b54ee9ef360065cd74a9b0c67be5b08da8f",
           "signature": {
             "type": "authenticode",
             "required": false
           }
+        }
+      ],
+      "releases": [
+        {
+          "version": "0.9.9",
+          "releasedAt": "2026-09-12",
+          "artifacts": [
+            {
+              "platform": "macos",
+              "architecture": "universal",
+              "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/tonemesh-v0.9.9/ToneMesh-0.9.9-beta-macos-universal.zip",
+              "sha256": "ef7a73f32c11017632d7df337c7fdc43ed0b933dd5e3a503c0bb6c4c0bbfddfc",
+              "signature": { "type": "developer-id", "required": false }
+            },
+            {
+              "platform": "windows",
+              "architecture": "x64",
+              "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/tonemesh-v0.9.9/ToneMesh-0.9.9-beta-win-x64.zip",
+              "sha256": "94f56c2d0a7c1fa4412357a9669d9b54ee9ef360065cd74a9b0c67be5b08da8f",
+              "signature": { "type": "authenticode", "required": false }
+            }
+          ]
+        },
+        {
+          "version": "0.9.8",
+          "releasedAt": "2026-08-24",
+          "artifacts": [
+            {
+              "platform": "macos",
+              "architecture": "universal",
+              "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/tonemesh-v0.9.8/ToneMesh-0.9.8-beta-macos-universal.zip",
+              "sha256": "5683239e2d905cd6eb94cfa29c07207a1cd657aefe2a23d96598cd7fbf672f19",
+              "signature": { "type": "developer-id", "required": false }
+            },
+            {
+              "platform": "windows",
+              "architecture": "x64",
+              "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/tonemesh-v0.9.8/ToneMesh-0.9.8-beta-win-x64.zip",
+              "sha256": "ff87b3c97f3c27b8ad4ec8989f6b24be205422506c12d4d7883f0a4556f514c4",
+              "signature": { "type": "authenticode", "required": false }
+            }
+          ]
         }
       ]
     }
