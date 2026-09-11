@@ -97,7 +97,7 @@ namespace MyVibe
 
             if (args.Length > 0 && String.Equals(args[0], "--self-test", StringComparison.OrdinalIgnoreCase))
             {
-                string error;
+                string error = null;
                 bool pathsAreSafe = PluginInstaller.IsSafeResultPath(Path.Combine(PluginInstaller.IpcRoot, "result-self-test.txt"))
                     && !PluginInstaller.IsSafeResultPath(Path.Combine(Path.GetTempPath(), "myvibe-unsafe.txt"));
                 bool registryIsValid = PluginRegistry.All.Length == 3
