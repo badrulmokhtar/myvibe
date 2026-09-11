@@ -24,7 +24,7 @@ Create the signed ToneMesh release package with:
 powershell -ExecutionPolicy Bypass -File .\myvibe\package-tonemesh.ps1 -ToneMeshRoot '<ToneMesh repository>'
 ```
 
-The executable is written to `myvibe\bin\MyVibe.exe`. 2.5D Transform remains embedded for offline installation. ToneMesh and Logolize are downloaded only from the verified MyVibe catalog and are re-authorized after elevation before installation.
+The executable is written to `myvibe\bin\MyVibe.exe`. All three plug-in packages are downloaded only from the verified MyVibe catalog and are re-authorized after elevation before installation.
 
 Create the private-beta distribution ZIP with:
 
@@ -41,7 +41,7 @@ powershell -ExecutionPolicy Bypass -File .\myvibe\build-release.ps1
 - Refuses install/remove while Illustrator is open.
 - Requests administrator access only when installing or removing.
 - Backs up the exact current `.aip` and CEP folder before changing them.
-- Installs 2.5D Transform from the embedded release and ToneMesh or Logolize from the verified catalog.
+- Installs 2.5D Transform, ToneMesh, and Logolize from the verified catalog.
 - Removes each plugin's components and clears only the current plugin's CEP cache.
 - Restores the previous copy if installation or removal fails partway through.
 - Validates the expected CEP manifest during extraction; CEP signatures are enforced when the catalog requires them, while beta CEP-only releases may explicitly opt out.
