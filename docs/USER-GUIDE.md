@@ -1,10 +1,10 @@
-# MyVibe plugin manager and 2.5D Transform user guide
+# MyVibe plug-in manager user guide
 
-This guide explains how to install, update, remove, and recover **2.5D Transform** and **ToneMesh** with **MyVibe**, then covers the complete 2.5D Transform workflow inside Adobe Illustrator.
+This guide explains how to install, update, roll back, remove, and recover **2.5D Transform**, **ToneMesh**, and **Logolize** with **MyVibe**, then covers the complete 2.5D Transform workflow inside Adobe Illustrator.
 
 > Current beta compatibility: Windows 10/11 x64 or macOS 13+ universal; Adobe Illustrator 2026, version 30.x; MyVibe 0.5.0; 2.5D Transform 0.9.6; ToneMesh 0.9.9; Logolize 1.6.4. Installation steps below cover Windows; see [Unsigned beta installation](UNSIGNED-BETA.md) for macOS opening instructions.
 
-[Download the PDF edition](MyVibe-and-2.5D-Transform-User-Guide.pdf)
+[Download the PDF edition](MyVibe-and-2.5D-Transform-User-Guide.pdf) (the PDF focuses on the 2.5D Transform workflow.)
 
 ## Contents
 
@@ -26,14 +26,18 @@ This guide explains how to install, update, remove, and recover **2.5D Transform
 
 ## 1. What you are installing
 
-MyVibe manages creative plug-ins on Windows and macOS. It installs both parts required by 2.5D Transform and ToneMesh:
+MyVibe manages creative plug-ins on Windows and macOS. Native plug-ins install both parts:
 
 - The native `.aip` engine that performs the Illustrator transformation.
 - The CEP interface that provides the main panel and Linked Groups panel.
 
+Logolize is CEP-only: it installs its CEP interface without a native `.aip` engine. The same package works on Windows and macOS; beta releases may require CEP developer mode when the catalog marks the CEP signature as optional.
+
 2.5D Transform adds live X, Y, Z, and perspective controls for editable Illustrator artwork. It supports paths, compound paths, Pathfinder results, groups, clipping groups, live text, symbols, gradients, raster images, and placed images.
 
 ToneMesh creates editable tone-driven vector fields from solid fills, gradients, and mesh gradients. It includes multiple structures and marks, custom marks, appearance handles, and contour-aware edge behavior.
+
+Logolize generates responsive, editable logo systems with grid, clear-space, construction, and mark controls.
 
 MyVibe creates a backup before it installs, updates, or removes the plug-in. If an operation fails, it attempts to restore the previous copy.
 
@@ -87,14 +91,14 @@ MyVibe 0.2 detects the current manager but cannot replace its own unsigned execu
 
 1. Close Adobe Illustrator.
 2. Run `MyVibe.exe`.
-3. Select the **2.5D Transform** or **ToneMesh** card.
+3. Select the **2.5D Transform**, **ToneMesh**, or **Logolize** card.
 4. Review the detail panel. Confirm that Illustrator 2026 and the Visual C++ runtime are detected.
 5. Select **Install plugin**.
 6. Approve the Windows administrator prompt. MyVibe requests elevated access only when it changes the Illustrator installation.
 7. Wait for the success message. Do not open Illustrator while installation is in progress.
 8. Start Illustrator after MyVibe confirms that installation is complete.
 
-MyVibe installs the selected native engine and CEP interface together. 2.5D Transform can be installed from the bundled offline payload; ToneMesh requires the verified online catalog. Avoid manually mixing files from different releases.
+MyVibe installs the selected native engine and CEP interface together when the plug-in has a native engine. 2.5D Transform can be installed from the bundled offline payload; ToneMesh and Logolize use the verified online catalog. Logolize is CEP-only. Avoid manually mixing files from different releases.
 
 ## 5. Open the plug-in in Illustrator
 
@@ -109,6 +113,10 @@ Open the companion panel from:
 Open ToneMesh from:
 
 **Window > Extensions > ToneMesh**
+
+Open Logolize from:
+
+**Window > Extensions > Logolize**
 
 You can dock either panel with your other Illustrator panels and resize it. The controls reflow as the panel becomes wider or narrower.
 
@@ -258,6 +266,8 @@ MyVibe verifies the download and saves the current plug-in before replacing it. 
 
 MyVibe downloads and verifies all selected packages before changing any installed plugin. Each plugin receives its own backup and rollback protection.
 
+To roll back a plug-in, select it, choose an earlier release from **Version history**, and select **Roll back to [version]**. MyVibe verifies that historical GitHub artifact, backs up the current installation, and restores the previous copy if the rollback fails. This works for Logolize as well as the native plug-ins.
+
 ### Update or restore MyVibe
 
 When a future manager update is offered, select **Check for updates**, then select **Update MyVibe to [version]**. MyVibe verifies the release, stores the current manager version, replaces itself, and restarts.
@@ -328,6 +338,7 @@ MyVibe normally restores the previous copy. Read the complete message, keep Illu
 | Install a plug-in | Close Illustrator, open MyVibe, select its card, select Install plugin |
 | Open the main panel | Window > Extensions > 2.5D Transform |
 | Open ToneMesh | Window > Extensions > ToneMesh |
+| Open Logolize | Window > Extensions > Logolize |
 | Open linked-group management | Window > Extensions > 2.5D Transform: Linked Groups |
 | Reuse a view without a relationship | Copy view, select other artwork, Paste view |
 | Keep objects synchronized | Select two or more objects, Link selection |

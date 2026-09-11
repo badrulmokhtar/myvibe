@@ -16,6 +16,7 @@ All notable public changes are documented here. Releases follow semantic version
 - 2.5D Transform 0.9.6 and ToneMesh 0.9.9 pause native idle work while their CEP panels are hidden on both platforms.
 - Older catalog readers remain compatible because release history is additive.
 - Logolize 1.6.4 is published as the first managed CEP-only release asset.
+- Windows and macOS lifecycle documentation now covers Logolize install, update, rollback, removal, and CEP-only behavior.
 
 ## [0.4.0] - 2026-08-21
 

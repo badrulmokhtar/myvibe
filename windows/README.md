@@ -4,7 +4,7 @@ MyVibe is a dependency-free Windows manager for **2.5D Transform 0.9.6**, **Tone
 
 ## Build
 
-Create and verify the signed CEP payload first. Keep the certificate password in the process environment, never in a file:
+Create and verify signed CEP payloads for releases that require them. Keep the certificate password in the process environment, never in a file:
 
 ```powershell
 $env:MYVIBE_ZXP_CERT_PASSWORD = '<local certificate password>'
@@ -24,7 +24,7 @@ Create the signed ToneMesh release package with:
 powershell -ExecutionPolicy Bypass -File .\myvibe\package-tonemesh.ps1 -ToneMeshRoot '<ToneMesh repository>'
 ```
 
-The executable is written to `myvibe\bin\MyVibe.exe`. 2.5D Transform remains embedded for offline installation. ToneMesh is downloaded only from the signed MyVibe catalog and is re-authorized after elevation before installation.
+The executable is written to `myvibe\bin\MyVibe.exe`. 2.5D Transform remains embedded for offline installation. ToneMesh and Logolize are downloaded only from the verified MyVibe catalog and are re-authorized after elevation before installation.
 
 Create the private-beta distribution ZIP with:
 
@@ -34,17 +34,17 @@ powershell -ExecutionPolicy Bypass -File .\myvibe\build-release.ps1
 
 ## Current behavior
 
-- Displays and independently manages 2.5D Transform and ToneMesh.
+- Displays and independently manages 2.5D Transform, ToneMesh, and Logolize.
 - Detects complete, missing, and partial installations for each plugin.
 - Reads the CEP manifest when a manually installed plugin has no MyVibe version record.
 - Detects the Illustrator 2026 installation and required Visual C++ runtime.
 - Refuses install/remove while Illustrator is open.
 - Requests administrator access only when installing or removing.
 - Backs up the exact current `.aip` and CEP folder before changing them.
-- Installs 2.5D Transform from the embedded release and ToneMesh from the verified catalog.
-- Removes both components and clears only the current plugin's CEP cache.
+- Installs 2.5D Transform from the embedded release and ToneMesh or Logolize from the verified catalog.
+- Removes each plugin's components and clears only the current plugin's CEP cache.
 - Restores the previous copy if installation or removal fails partway through.
-- Requires an Adobe-verified signed CEP payload during the build.
+- Validates the expected CEP manifest during extraction; CEP signatures are enforced when the catalog requires them, while beta CEP-only releases may explicitly opt out.
 - Verifies the catalog with an embedded RSA public key and restricts all downloads to the official MyVibe GitHub release repository.
 - Rechecks catalog authorization inside administrator package installs.
 - Updates MyVibe in-app with bounded, traversal-safe ZIP extraction, backup, health check, and rollback.
