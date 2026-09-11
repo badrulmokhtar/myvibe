@@ -23,6 +23,7 @@ jobs:
       - run: node tools/verify-catalog.mjs
       - run: node tools/verify-catalog-v2.mjs --self-test
       - run: node tools/verify-catalog-v2.mjs catalog-v2.json catalog-v2.json.sig
+      - run: node tools/check-manager-source.mjs
       - run: node tools/check-public-tree.mjs
 
   macos:

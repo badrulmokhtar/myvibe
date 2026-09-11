@@ -2,7 +2,7 @@
 
 This guide explains how to install, update, remove, and recover **2.5D Transform** and **ToneMesh** with **MyVibe**, then covers the complete 2.5D Transform workflow inside Adobe Illustrator.
 
-> Current beta compatibility: Windows 10/11 x64 or macOS 13+ universal; Adobe Illustrator 2026, version 30.x; MyVibe 0.4.0; 2.5D Transform 0.9.5; ToneMesh 0.9.8. Installation steps below cover Windows; see [Unsigned beta installation](UNSIGNED-BETA.md) for macOS opening instructions.
+> Current beta compatibility: Windows 10/11 x64 or macOS 13+ universal; Adobe Illustrator 2026, version 30.x; MyVibe 0.5.0; 2.5D Transform 0.9.6; ToneMesh 0.9.9; Logolize 1.6.4. Installation steps below cover Windows; see [Unsigned beta installation](UNSIGNED-BETA.md) for macOS opening instructions.
 
 [Download the PDF edition](MyVibe-and-2.5D-Transform-User-Guide.pdf)
 

@@ -23,13 +23,14 @@ function verifyArtifact(artifact, channel, label) {
   assert(url.pathname.toLowerCase().startsWith('/badrulmokhtar/myvibe/releases/download/'), `${label}.downloadUrl must target the official MyVibe release repository`);
 
   assert(artifact.signature && typeof artifact.signature === 'object', `${label}.signature is required`);
-  const expectedSignature = artifact.platform === 'windows' ? 'authenticode' : 'developer-id';
-  assert.equal(artifact.signature.type, expectedSignature, `${label}.signature.type must be ${expectedSignature}`);
+  assert(['authenticode', 'developer-id', 'adobe-cep'].includes(artifact.signature.type), `${label}.signature.type is unsupported`);
+  if (artifact.signature.type === 'authenticode') assert.equal(artifact.platform, 'windows', `${label} Authenticode is Windows-only`);
+  if (artifact.signature.type === 'developer-id') assert.equal(artifact.platform, 'macos', `${label} Developer ID is macOS-only`);
   assert.equal(typeof artifact.signature.required, 'boolean', `${label}.signature.required must be boolean`);
   if (channel === 'stable') {
     assert.equal(artifact.signature.required, true, `${label} must require a trusted signature on stable`);
-    if (artifact.platform === 'windows') assert(thumbprintPattern.test(artifact.signature.signerThumbprint), `${label}.signature.signerThumbprint is required on stable`);
-    if (artifact.platform === 'macos') assert(teamPattern.test(artifact.signature.teamIdentifier), `${label}.signature.teamIdentifier is required on stable`);
+    if (artifact.signature.type === 'authenticode') assert(thumbprintPattern.test(artifact.signature.signerThumbprint), `${label}.signature.signerThumbprint is required on stable`);
+    if (artifact.signature.type === 'developer-id') assert(teamPattern.test(artifact.signature.teamIdentifier), `${label}.signature.teamIdentifier is required on stable`);
   }
   if (artifact.signature.signerThumbprint !== undefined) assert(thumbprintPattern.test(artifact.signature.signerThumbprint), `${label}.signature.signerThumbprint is invalid`);
   if (artifact.signature.teamIdentifier !== undefined) assert(teamPattern.test(artifact.signature.teamIdentifier), `${label}.signature.teamIdentifier is invalid`);
@@ -47,6 +48,23 @@ function verifyProduct(product, channel, label) {
     const target = `${artifact.platform}/${artifact.architecture}`;
     assert(!targets.has(target), `${label} has duplicate ${target} artifacts`);
     targets.add(target);
+  }
+  if (product.releases !== undefined) {
+    assert(Array.isArray(product.releases) && product.releases.length > 0, `${label}.releases must not be empty`);
+    const versions = new Set();
+    let previous = null;
+    for (const [index, release] of product.releases.entries()) {
+      const releaseLabel = `${label}.releases[${index}]`;
+      assert(versionPattern.test(release?.version), `${releaseLabel}.version must use x.y.z`);
+      assert(/^\d{4}-\d{2}-\d{2}$/.test(release.releasedAt), `${releaseLabel}.releasedAt must use YYYY-MM-DD`);
+      assert(!versions.has(release.version), `${label} has duplicate release ${release.version}`);
+      versions.add(release.version);
+      if (previous) assert(previous.localeCompare(release.version, undefined, { numeric: true }) > 0, `${label}.releases must be newest first`);
+      previous = release.version;
+      verifyProduct({ id: product.id, name: product.name, version: release.version, artifacts: release.artifacts }, channel, releaseLabel);
+    }
+    assert.equal(product.releases[0].version, product.version, `${label}.releases[0] must be the latest version`);
+    assert.deepEqual(product.releases[0].artifacts, product.artifacts, `${label} latest release artifacts must match top-level artifacts`);
   }
 }
 
@@ -87,6 +105,10 @@ const sample = {
 
 if (process.argv.includes('--self-test')) {
   verifyCatalogV2(sample);
+  const history = structuredClone(sample);
+  history.plugins[0].releases = [{ version: '1.0.0', releasedAt: '2026-09-11', artifacts: history.plugins[0].artifacts }];
+  verifyCatalogV2(history);
+  assert.throws(() => verifyCatalogV2({ ...history, plugins: [{ ...history.plugins[0], releases: [{ ...history.plugins[0].releases[0], version: '0.9.0' }] }] }));
   const stable = structuredClone(sample);
   stable.channel = 'stable';
   for (const product of [stable.manager, ...stable.plugins]) {

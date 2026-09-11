@@ -3,7 +3,7 @@ name: Windows beta
 on:
   workflow_dispatch:
   push:
-    branches: [codex/myvibe-windows-v2]
+    branches: [main]
   pull_request:
     paths:
       - ".github/workflows/windows-beta.yml"
@@ -20,16 +20,6 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
-      - name: Fetch verified 2.5D Transform payload
-        shell: powershell
-        run: |
-          $payload = 'windows\payload\2.5D Transform-0.9.5-beta.zip'
-          New-Item -ItemType Directory -Force -Path (Split-Path $payload) | Out-Null
-          Invoke-WebRequest -Uri 'https://github.com/badrulmokhtar/myvibe/releases/download/transform2d5-v0.9.5/2.5D-Transform-0.9.5-beta-win-x64.zip' -OutFile $payload
-          $expected = '88dfa7099458b53ee7d78006c247f368c7470aaa89fed7a426648faa48932944'
-          $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath $payload).Hash.ToLowerInvariant()
-          if ($actual -ne $expected) { throw "Unexpected 2.5D Transform payload hash: $actual" }
-
       - name: Build and verify Windows beta
         shell: powershell
         run: |
@@ -39,17 +29,19 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           windows\bin\MyVibe.exe --screenshot windows\dist\myvibe-overview.png 1080 720 com.badru.transform2d5
           windows\bin\MyVibe.exe --screenshot windows\dist\myvibe-tonemesh.png 1080 720 com.badru.tonemesh
+          windows\bin\MyVibe.exe --screenshot windows\dist\myvibe-logolize.png 1080 720 com.badru.logolize
           windows\bin\MyVibe.exe --screenshot windows\dist\myvibe-compact.png 760 680 com.badru.tonemesh
 
       - name: Upload verified manager ZIP
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: MyVibe-0.4.0-beta.1-win-x64
+          name: MyVibe-0.5.0-beta.1-win-x64
           path: |
-            windows/dist/MyVibe-0.4.0-beta.1-win-x64.zip
-            windows/dist/MyVibe-0.4.0-beta.1-win-x64.zip.sha256
+            windows/dist/MyVibe-0.5.0-beta.1-win-x64.zip
+            windows/dist/MyVibe-0.5.0-beta.1-win-x64.zip.sha256
             windows/dist/myvibe-windows.png
             windows/dist/myvibe-overview.png
             windows/dist/myvibe-tonemesh.png
+            windows/dist/myvibe-logolize.png
             windows/dist/myvibe-compact.png
           if-no-files-found: error

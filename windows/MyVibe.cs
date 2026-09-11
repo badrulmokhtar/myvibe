@@ -30,9 +30,9 @@ using Polyline = System.Windows.Shapes.Polyline;
 [assembly: AssemblyCompany("MyVibe")]
 [assembly: AssemblyProduct("MyVibe")]
 [assembly: AssemblyCopyright("Copyright 2026 MyVibe")]
-[assembly: AssemblyVersion("0.4.0.0")]
-[assembly: AssemblyFileVersion("0.4.0.0")]
-[assembly: AssemblyInformationalVersion("0.4.0")]
+[assembly: AssemblyVersion("0.5.0.0")]
+[assembly: AssemblyFileVersion("0.5.0.0")]
+[assembly: AssemblyInformationalVersion("0.5.0")]
 
 namespace MyVibe
 {
@@ -100,9 +100,11 @@ namespace MyVibe
                 string error;
                 bool pathsAreSafe = PluginInstaller.IsSafeResultPath(Path.Combine(PluginInstaller.IpcRoot, "result-self-test.txt"))
                     && !PluginInstaller.IsSafeResultPath(Path.Combine(Path.GetTempPath(), "myvibe-unsafe.txt"));
-                bool registryIsValid = PluginRegistry.All.Length == 2
+                bool registryIsValid = PluginRegistry.All.Length == 3
                     && PluginRegistry.Find("com.badru.transform2d5") != null
-                    && PluginRegistry.Find("com.badru.tonemesh") != null;
+                    && PluginRegistry.Find("com.badru.tonemesh") != null
+                    && PluginRegistry.Find("com.badru.logolize") != null
+                    && !PluginRegistry.Logolize.HasNative;
                 bool releaseUrlsAreStrict = CatalogClient.IsTrustedReleaseUrl("https://github.com/badrulmokhtar/myvibe/releases/download/test/file.zip")
                     && !CatalogClient.IsTrustedReleaseUrl("https://github.com/attacker/myvibe/releases/download/test/file.zip")
                     && !CatalogClient.IsTrustedReleaseUrl("http://github.com/badrulmokhtar/myvibe/releases/download/test/file.zip");
@@ -120,8 +122,7 @@ namespace MyVibe
                 bool catalogV2SignatureIsValid = CatalogClient.VerifyCatalogV2Signature(
                     System.Text.Encoding.UTF8.GetBytes("MyVibe catalog v2 signature self-test"),
                     System.Text.Encoding.ASCII.GetBytes("qJT2aY5GS/t73NnN/OuEg6S/eYuFWFxHv3qsTsv2V5RdWc+6gAgzXrJJG75rK11GUeXZLvDV6ugL92UE4sdnfEhpzrWsKF0WFW00XbTA31HeM4RUv15k1dJwtrVbxVmL8XMfCne3U3ddAP8gGqze8b+LqZ+0Z0MBomtgm3izWHsFpmYzQHEkZuQ0alYEc4zI5LC3EYH5F9teNXbBf4ozrfHXnq9MY5dBYLb8ppTvsoAGY2QKmRmWufoQfGyn9CQeQrNwEWzS0lOcgXRI8MvtVwvmQs/3akpV/qJ08klqTo8bjqE1fOg8R059DIZRuVlxttKT4epO6ubfPJ0b74Je7+TqyW5eq+PE+HP8yxQlvgQ9x/zcDuDv2PE79r1OZORevxdg22utOeb3g2ShvPvsqxjScXk22SUM2NcCaBqLmJE8JKgnoMuyOjokcTKf/h/o3HgXY1PPgnrqiHMyXIf0LYMX7gdYSSB9tMV1lAzKFZRSJz3OB9IcX6OqpHI+nD18"));
-                bool valid = PluginInstaller.ValidatePayload(PluginRegistry.Transform2D5, out error)
-                    && pathsAreSafe && registryIsValid && releaseUrlsAreStrict && archivePathsAreSafe && manualVersionDetectionWorks && catalogSignatureIsValid && catalogV2SignatureIsValid;
+                bool valid = pathsAreSafe && registryIsValid && releaseUrlsAreStrict && archivePathsAreSafe && manualVersionDetectionWorks && catalogSignatureIsValid && catalogV2SignatureIsValid;
                 if (!pathsAreSafe)
                     error = "administrator result-path validation failed";
                 else if (!registryIsValid)
@@ -217,6 +218,7 @@ namespace MyVibe
         internal readonly string CachePattern;
         internal readonly string PayloadResource;
         internal readonly bool IsToneMesh;
+        internal bool HasNative { get { return !String.IsNullOrEmpty(AipFileName); } }
 
         internal PluginDefinition(string id, string name, string version, string summary, string cardSummary,
             string aipFileName, string cepFolderName, string stateFileName, string cachePattern, string payloadResource, bool isToneMesh)
@@ -238,18 +240,24 @@ namespace MyVibe
     internal static class PluginRegistry
     {
         internal static readonly PluginDefinition Transform2D5 = new PluginDefinition(
-            "com.badru.transform2d5", "2.5D Transform", "0.9.5",
+            "com.badru.transform2d5", "2.5D Transform", "0.9.6",
             "Create precise 2.5D views while keeping text, vectors, gradients, and linked artwork editable.",
             "Perspective transformation for editable Illustrator artwork, with linked views and reusable presets.",
-            "2.5D Transform.aip", "2.5D Transform", "transform2d5.version", "ILST_*_com.badru.transform2d5.*", "MyVibe.Transform2D5.zip", false);
+            "2.5D Transform.aip", "2.5D Transform", "transform2d5.version", "ILST_*_com.badru.transform2d5.*", null, false);
 
         internal static readonly PluginDefinition ToneMesh = new PluginDefinition(
-            "com.badru.tonemesh", "ToneMesh", "0.9.8",
+            "com.badru.tonemesh", "ToneMesh", "0.9.9",
             "Build editable halftone fields from solid fills, gradients, mesh gradients, and custom marks.",
             "Editable tone-driven vector fields with custom structures, marks, appearance handles, and contour wrapping.",
             "ToneMesh.aip", "ToneMesh", "tonemesh.version", "ILST_*_com.badru.tonemesh.*", null, true);
 
-        internal static readonly PluginDefinition[] All = { Transform2D5, ToneMesh };
+        internal static readonly PluginDefinition Logolize = new PluginDefinition(
+            "com.badru.logolize", "Logolize", "1.6.4",
+            "Generate responsive, editable logo systems in Illustrator.",
+            "Responsive logo-system generation with editable Illustrator artwork.",
+            null, "Logolize", "logolize.version", "ILST_*_com.badru.logolize.*", null, false);
+
+        internal static readonly PluginDefinition[] All = { Transform2D5, ToneMesh, Logolize };
 
         internal static PluginDefinition Find(string id)
         {
@@ -305,6 +313,8 @@ namespace MyVibe
         private TextBlock _detailSummary;
         private TextBlock _aipPathValue;
         private TextBlock _cepPathValue;
+        private ComboBox _versionPicker;
+        private readonly Dictionary<string, List<CatalogPackage>> _catalogReleases = new Dictionary<string, List<CatalogPackage>>(StringComparer.OrdinalIgnoreCase);
 
         internal ManagerWindow()
         {
@@ -416,7 +426,7 @@ namespace MyVibe
                 CornerRadius = new CornerRadius(8),
                 Padding = new Thickness(10, 6, 10, 6),
                 VerticalAlignment = VerticalAlignment.Center,
-                Child = new TextBlock { Text = "MyVibe 0.4.0", Foreground = Muted, FontSize = 11 }
+                Child = new TextBlock { Text = "MyVibe 0.5.0", Foreground = Muted, FontSize = 11 }
             };
             Grid.SetColumn(version, 2);
             headerGrid.Children.Add(version);
@@ -615,6 +625,15 @@ namespace MyVibe
             };
             content.Children.Add(_detailSummary);
 
+            _versionPicker = new ComboBox
+            {
+                Height = 34,
+                Margin = new Thickness(0, 0, 0, 10),
+                ToolTip = "Choose the latest release or a previous GitHub release to roll back."
+            };
+            _versionPicker.SelectionChanged += delegate { if (!_busy) RefreshState(); };
+            content.Children.Add(_versionPicker);
+
             primary = CreateButton("Install plugin", true);
             primary.Height = 42;
             primary.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -655,7 +674,7 @@ namespace MyVibe
             content.Children.Add(ComponentRow("Visual C++ runtime", runtimeAvailable ? "Detected" : "Missing", runtimeAvailable ? Success : Danger));
 
             content.Children.Add(SectionTitle("Install locations"));
-            _aipPathValue = new TextBlock { Text = PluginInstaller.GetAipPath(_selectedPlugin), Foreground = Muted, FontSize = 10, TextWrapping = TextWrapping.Wrap };
+            _aipPathValue = new TextBlock { Text = PluginInstaller.GetAipPath(_selectedPlugin) ?? "CEP-only plug-in", Foreground = Muted, FontSize = 10, TextWrapping = TextWrapping.Wrap };
             _cepPathValue = new TextBlock { Text = PluginInstaller.GetCepPath(_selectedPlugin), Foreground = Muted, FontSize = 10, TextWrapping = TextWrapping.Wrap };
             content.Children.Add(PathText(_aipPathValue));
             content.Children.Add(PathText(_cepPathValue));
@@ -708,6 +727,24 @@ namespace MyVibe
 
             PluginDefinition plugin = _selectedPlugin;
             InstallState state = PluginInstaller.GetState(plugin);
+            CatalogPackage selectedRelease = SelectedCatalogRelease(plugin);
+            string installedVersion = PluginInstaller.GetInstalledVersion(plugin);
+            if (selectedRelease != null && state == InstallState.Installed && !String.Equals(selectedRelease.version, installedVersion, StringComparison.OrdinalIgnoreCase))
+            {
+                if (PluginInstaller.IsIllustratorRunning())
+                {
+                    ShowOperation("Close Illustrator, then try again.", true);
+                    return;
+                }
+                bool rollback = IsVersionNewer(installedVersion, selectedRelease.version);
+                SetBusy(true, rollback ? "Downloading verified rollback…" : "Downloading verified plugin update…");
+                OperationResult selectedInstall = await DownloadAndInstallPluginAsync(plugin, selectedRelease);
+                SetBusy(false, selectedInstall.Message);
+                if (!selectedInstall.Success)
+                    ShowOperation(selectedInstall.Message, true);
+                RefreshState();
+                return;
+            }
             CatalogPackage availableUpdate;
             if (_availablePluginUpdates.TryGetValue(plugin.Id, out availableUpdate) && state == InstallState.Installed)
             {
@@ -1093,9 +1130,19 @@ namespace MyVibe
             AutomationProperties.SetName(_updateAllButton, "Update all " + updateCount + " available plugins");
 
             InstallState state = PluginInstaller.GetState(_selectedPlugin);
+            CatalogPackage selectedRelease = SelectedCatalogRelease(_selectedPlugin);
+            string installedVersion = PluginInstaller.GetInstalledVersion(_selectedPlugin);
             if (state == InstallState.Installed)
             {
                 SetPill(_detailStatePill, _detailState, "Installed", Success);
+                if (selectedRelease != null && !String.Equals(selectedRelease.version, installedVersion, StringComparison.OrdinalIgnoreCase))
+                {
+                    bool rollback = IsVersionNewer(installedVersion, selectedRelease.version);
+                    _primaryButton.Content = (rollback ? "Roll back to " : "Install ") + selectedRelease.version;
+                    SetPrimaryButtonAppearance(true);
+                    AutomationProperties.SetName(_primaryButton, (rollback ? "Roll back " : "Update ") + _selectedPlugin.Name + " to " + selectedRelease.version);
+                    return;
+                }
                 CatalogPackage update;
                 if (_availablePluginUpdates.TryGetValue(_selectedPlugin.Id, out update))
                 {
@@ -1131,10 +1178,36 @@ namespace MyVibe
             _catalogPackages.Clear();
             foreach (KeyValuePair<string, CatalogPackage> item in result.Packages)
                 _catalogPackages[item.Key] = item.Value;
+            _catalogReleases.Clear();
+            foreach (KeyValuePair<string, List<CatalogPackage>> item in result.Releases)
+                _catalogReleases[item.Key] = item.Value;
             _availablePluginUpdates.Clear();
             foreach (KeyValuePair<string, CatalogPackage> item in result.PluginUpdates)
                 _availablePluginUpdates[item.Key] = item.Value;
             _availableManagerUpdate = result.ManagerUpdate;
+            UpdateVersionPicker();
+        }
+
+        private CatalogPackage SelectedCatalogRelease(PluginDefinition plugin)
+        {
+            return _versionPicker == null ? null : _versionPicker.SelectedItem as CatalogPackage;
+        }
+
+        private static bool IsVersionNewer(string candidate, string current)
+        {
+            Version candidateVersion;
+            Version currentVersion;
+            return Version.TryParse(candidate, out candidateVersion) && Version.TryParse(current, out currentVersion) && candidateVersion > currentVersion;
+        }
+
+        private void UpdateVersionPicker()
+        {
+            if (_versionPicker == null)
+                return;
+            List<CatalogPackage> releases;
+            _versionPicker.ItemsSource = _catalogReleases.TryGetValue(_selectedPlugin.Id, out releases) ? releases : null;
+            _versionPicker.SelectedIndex = releases != null && releases.Count > 0 ? 0 : -1;
+            _versionPicker.IsEnabled = releases != null && releases.Count > 1 && !_busy;
         }
 
         private void SelectPlugin(PluginDefinition plugin, bool bringIntoView)
@@ -1148,8 +1221,9 @@ namespace MyVibe
                 _detailName.Text = plugin.Name;
                 _detailVersion.Text = "Version " + plugin.Version;
                 _detailSummary.Text = plugin.Summary;
-                _aipPathValue.Text = PluginInstaller.GetAipPath(plugin);
+                _aipPathValue.Text = PluginInstaller.GetAipPath(plugin) ?? "CEP-only plug-in";
                 _cepPathValue.Text = PluginInstaller.GetCepPath(plugin);
+                UpdateVersionPicker();
                 ShowOperation(String.Empty, false);
                 RefreshState();
             }
@@ -1163,6 +1237,8 @@ namespace MyVibe
             _primaryButton.IsEnabled = !busy;
             _checkUpdateButton.IsEnabled = !busy;
             _updateAllButton.IsEnabled = !busy;
+            if (_versionPicker != null)
+                _versionPicker.IsEnabled = !busy && _versionPicker.Items.Count > 1;
             _progress.Visibility = busy ? Visibility.Visible : Visibility.Collapsed;
             ShowOperation(message, false);
         }
@@ -1488,7 +1564,7 @@ namespace MyVibe
 
         internal static string GetAipPath(PluginDefinition plugin)
         {
-            return Path.Combine(IllustratorRoot, "Plug-ins", plugin.AipFileName);
+            return plugin.HasNative ? Path.Combine(IllustratorRoot, "Plug-ins", plugin.AipFileName) : null;
         }
 
         internal static string GetCepPath(PluginDefinition plugin)
@@ -1500,9 +1576,9 @@ namespace MyVibe
         {
             string aipPath = GetAipPath(plugin);
             string cepPath = GetCepPath(plugin);
-            bool aip = File.Exists(aipPath);
+            bool aip = plugin.HasNative && File.Exists(aipPath);
             bool cep = Directory.Exists(cepPath) && File.Exists(Path.Combine(cepPath, @"CSXS\manifest.xml"));
-            if (aip && cep)
+            if ((!plugin.HasNative || aip) && cep)
                 return InstallState.Installed;
             if (aip || cep)
                 return InstallState.Incomplete;
@@ -1580,7 +1656,7 @@ namespace MyVibe
                 return OperationResult.Fail(plugin.Name + " requires the verified online package.");
             if (!IsSupportedIllustratorInstalled())
                 return OperationResult.Fail("Adobe Illustrator 2026 was not found. Install Illustrator 2026, then try again.");
-            if (!HasNativeRuntime())
+            if (plugin.HasNative && !HasNativeRuntime())
                 return OperationResult.Fail("Microsoft Visual C++ 2015–2022 Redistributable (x64) is required before installing this plugin.");
             if (IsIllustratorRunning())
                 return OperationResult.Fail("Close Illustrator, then try again.");
@@ -1619,7 +1695,7 @@ namespace MyVibe
                 return OperationResult.Fail("The downloaded plugin package is not authorized by the verified MyVibe catalog.");
             if (!IsSupportedIllustratorInstalled())
                 return OperationResult.Fail("Adobe Illustrator 2026 was not found. Install Illustrator 2026, then try again.");
-            if (!HasNativeRuntime())
+            if (plugin.HasNative && !HasNativeRuntime())
                 return OperationResult.Fail("Microsoft Visual C++ 2015-2022 Redistributable (x64) is required before installing this plugin.");
             if (IsIllustratorRunning())
                 return OperationResult.Fail("Close Illustrator, then try again.");
@@ -1674,7 +1750,7 @@ namespace MyVibe
                 return OperationResult.Fail("The plugin update request is empty or too large.");
             if (!IsSupportedIllustratorInstalled())
                 return OperationResult.Fail("Adobe Illustrator 2026 was not found. Install Illustrator 2026, then try again.");
-            if (!HasNativeRuntime())
+            if (packages.Any(delegate(PluginPackageRequest request) { PluginDefinition item = request == null ? null : PluginRegistry.Find(request.pluginId); return item != null && item.HasNative; }) && !HasNativeRuntime())
                 return OperationResult.Fail("Microsoft Visual C++ 2015-2022 Redistributable (x64) is required before installing these plugins.");
             if (IsIllustratorRunning())
                 return OperationResult.Fail("Close Illustrator, then try again.");
@@ -1820,14 +1896,14 @@ namespace MyVibe
                     }
                     using (ZipArchive archive = new ZipArchive(stream, ZipArchiveMode.Read, false))
                     {
-                        string aipSuffix = "/" + plugin.AipFileName;
+                        string aipSuffix = plugin.HasNative ? "/" + plugin.AipFileName : null;
                         string cepMarker = "/" + plugin.CepFolderName + "/";
-                        bool aip = archive.Entries.Any(delegate(ZipArchiveEntry entry) { return Normalize(entry.FullName).EndsWith(aipSuffix, StringComparison.OrdinalIgnoreCase); });
+                        bool aip = !plugin.HasNative || archive.Entries.Any(delegate(ZipArchiveEntry entry) { return Normalize(entry.FullName).EndsWith(aipSuffix, StringComparison.OrdinalIgnoreCase); });
                         bool manifest = archive.Entries.Any(delegate(ZipArchiveEntry entry) { return Normalize(entry.FullName).EndsWith(cepMarker + "CSXS/manifest.xml", StringComparison.OrdinalIgnoreCase); });
                         bool signature = archive.Entries.Any(delegate(ZipArchiveEntry entry) { return Normalize(entry.FullName).EndsWith(cepMarker + "META-INF/signatures.xml", StringComparison.OrdinalIgnoreCase); });
                         if (!aip || !manifest || !signature)
                         {
-                            error = "payload does not contain the native engine, CEP manifest, and CEP signature";
+                            error = "payload does not contain its required components and CEP signature";
                             return false;
                         }
                     }
@@ -1856,28 +1932,31 @@ namespace MyVibe
         {
             string aipPath = GetAipPath(plugin);
             string cepPath = GetCepPath(plugin);
-            string aipSuffix = "/" + plugin.AipFileName;
+            string aipSuffix = plugin.HasNative ? "/" + plugin.AipFileName : null;
             string cepMarker = "/" + plugin.CepFolderName + "/";
             using (ZipArchive archive = new ZipArchive(stream, ZipArchiveMode.Read, true))
             {
                     if (archive.Entries.Count > MaxPluginArchiveEntries)
                         throw new InvalidDataException("The plugin payload contains too many files.");
-                    ZipArchiveEntry aip = archive.Entries.FirstOrDefault(delegate(ZipArchiveEntry entry)
+                    ZipArchiveEntry aip = plugin.HasNative ? archive.Entries.FirstOrDefault(delegate(ZipArchiveEntry entry)
                     {
                         return Normalize(entry.FullName).EndsWith(aipSuffix, StringComparison.OrdinalIgnoreCase);
-                    });
-                    if (aip == null)
+                    }) : null;
+                    if (plugin.HasNative && aip == null)
                         throw new InvalidDataException("The native .aip engine is missing from the payload.");
                     bool manifest = archive.Entries.Any(delegate(ZipArchiveEntry entry) { return Normalize(entry.FullName).EndsWith(cepMarker + "CSXS/manifest.xml", StringComparison.OrdinalIgnoreCase); });
                     bool signature = archive.Entries.Any(delegate(ZipArchiveEntry entry) { return Normalize(entry.FullName).EndsWith(cepMarker + "META-INF/signatures.xml", StringComparison.OrdinalIgnoreCase); });
                     if (!manifest || !signature)
                         throw new InvalidDataException("The plugin payload does not contain a signed CEP interface.");
-                    long extractedBytes = aip.Length;
+                    long extractedBytes = aip == null ? 0 : aip.Length;
                     if (extractedBytes > MaxPluginExtractedBytes)
                         throw new InvalidDataException("The plugin payload is too large after extraction.");
 
-                    Directory.CreateDirectory(Path.GetDirectoryName(aipPath));
-                    CopyEntry(aip, aipPath);
+                    if (plugin.HasNative)
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(aipPath));
+                        CopyEntry(aip, aipPath);
+                    }
 
                     string cepRoot = Path.GetFullPath(cepPath) + Path.DirectorySeparatorChar;
                     Directory.CreateDirectory(cepPath);
@@ -1928,7 +2007,7 @@ namespace MyVibe
                 "backups",
                 plugin.Name,
                 DateTime.UtcNow.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture) + "-" + reason);
-            BackupSnapshot snapshot = new BackupSnapshot { Root = root, HadAip = File.Exists(aipPath), HadCep = Directory.Exists(cepPath) };
+            BackupSnapshot snapshot = new BackupSnapshot { Root = root, HadAip = plugin.HasNative && File.Exists(aipPath), HadCep = Directory.Exists(cepPath) };
             if (!snapshot.HadAip && !snapshot.HadCep)
                 return snapshot;
             Directory.CreateDirectory(root);
@@ -1957,7 +2036,7 @@ namespace MyVibe
         {
             string aipPath = GetAipPath(plugin);
             string cepPath = GetCepPath(plugin);
-            if (File.Exists(aipPath))
+            if (plugin.HasNative && File.Exists(aipPath))
                 File.Delete(aipPath);
             if (Directory.Exists(cepPath))
                 Directory.Delete(cepPath, true);
@@ -2033,6 +2112,14 @@ namespace MyVibe
         public string hostVersion;
         public string minimumManagerVersion;
         public CatalogArtifactV2[] artifacts;
+        public CatalogReleaseV2[] releases;
+    }
+
+    internal sealed class CatalogReleaseV2
+    {
+        public string version;
+        public string releasedAt;
+        public CatalogArtifactV2[] artifacts;
     }
 
     internal sealed class CatalogArtifactV2
@@ -2065,6 +2152,7 @@ namespace MyVibe
         public string hostVersion;
         public string minimumManagerVersion;
         public string signerThumbprint;
+        public override string ToString() { return "Version " + version; }
     }
 
     internal sealed class CatalogCheckResult
@@ -2072,6 +2160,7 @@ namespace MyVibe
         internal string Message;
         internal readonly Dictionary<string, CatalogPackage> Packages = new Dictionary<string, CatalogPackage>(StringComparer.OrdinalIgnoreCase);
         internal readonly Dictionary<string, CatalogPackage> PluginUpdates = new Dictionary<string, CatalogPackage>(StringComparer.OrdinalIgnoreCase);
+        internal readonly Dictionary<string, List<CatalogPackage>> Releases = new Dictionary<string, List<CatalogPackage>>(StringComparer.OrdinalIgnoreCase);
         internal CatalogPackage ManagerUpdate;
     }
 
@@ -2081,7 +2170,7 @@ namespace MyVibe
         private const string CatalogV2SignatureUrl = "https://raw.githubusercontent.com/badrulmokhtar/myvibe/main/catalog-v2.json.sig";
         private const string CatalogV1Url = "https://raw.githubusercontent.com/badrulmokhtar/myvibe/main/catalog.json";
         private const string CatalogV1SignatureUrl = "https://raw.githubusercontent.com/badrulmokhtar/myvibe/main/catalog.json.sig";
-        private const string CurrentManagerVersion = "0.4.0";
+        private const string CurrentManagerVersion = "0.5.0";
         private const string TrustedReleasePath = "/badrulmokhtar/myvibe/releases/download/";
         private const string CatalogV1PublicModulus = "yjcrH4sS/n+zyx4/RkZBc6WHTpzkBebMMRuHVSel+Llok5aeWJT8vCTOMsIUWf9pkMYn87tLzAO3iRTJPeF9FondJhzGqixpKzo1vhpxursq4AKbVpH8xDf39/RVkTIQOUxu7h1JlwenfAVwzVwXjngb0dV1i/16tiZHa00wllhJdhj80DM8kcp2XBmg9+wVMLS1JEQNTnhUUvkejsRTVytnvzogLNHzvkmCDEDeSzIn4j0lddeqEUbKYLSIO/A0xQhHkodgHoXym5/O0a6TC0NA0tUD43O6Hhlc9zOplliSP99dDVhAp9Kk+M1AwPRYqZHQL1qXMUpn2E16tTPhpS011ee96Rf2IFF7YhOo02RHsOlhY9U7eDPg0BGykWGZ+nDYrvGImPJNlz2faVVhhIBTzrtTcJmQVQdpyqDlHFzscCP2vHFKEZIkVT7u3ZmX2Y+Ct+fjrimelAH+weQ5aqN9Zjrx2fNs4lYb/CHceUq1blqyAzBD4nao1JUg4jxB";
         private const string CatalogV2PublicModulus = "qbFAZN9zfMnhezGb94F7uYNfOOPqCaybZ22EM4XamudRb9QSIsGxwhZ5nJCxMqtCMkzgVTV0EcWGK5sJTpMBASD8ai8ZkyFFd6HIur6jjf7JeuELtzG4QtOE6cBtcQpTZPoYDpJjhqfiRs3BnBgdFdydWJp7msFrbs0UH7yxY03fAZKKD3BDjE0+NKOjir2okTbjO8KJQjUf3mE+YrrAfN/gLfjRyYLv3NSKEDf9Mor87XnHDfulhSawp72BIlmKEI4UtFHxai2lv4ei+K8jwtID+SKxz/Xb19C3hX2L5/uIAft56FPex+1W49mTbq76kXJdgfPgqoaPQnTi28KCFCEgl+ngvkkZpoF1/A+v2Rnc25VchlFLRwWST8LA8VSt0mag2tANBeKjo1vl3lLkJmyz5S+2ddWiMTUtoZQThjSZjHRYgKAdl1DwEez9kww5ioVkrzKo5n7duooh4DMhEiY9YNLapchuksofpPxrexcdNkJgRvB8xMnSDRpxo+lJ";
@@ -2266,10 +2355,15 @@ namespace MyVibe
             List<string> messages = new List<string>();
             foreach (PluginDefinition definition in PluginRegistry.All)
             {
-                CatalogPackage package = catalog.plugins.FirstOrDefault(delegate(CatalogPackage item) { return String.Equals(item.id, definition.Id, StringComparison.OrdinalIgnoreCase); });
+                List<CatalogPackage> releases = catalog.plugins.Where(delegate(CatalogPackage item) { return String.Equals(item.id, definition.Id, StringComparison.OrdinalIgnoreCase); }).ToList();
+                CatalogPackage package = releases.FirstOrDefault();
                 if (package == null)
-                    throw new InvalidDataException(definition.Name + " is missing from the catalog.");
+                {
+                    messages.Add(definition.Name + " is awaiting its first verified release.");
+                    continue;
+                }
                 result.Packages[definition.Id] = package;
+                result.Releases[definition.Id] = releases;
                 string installed = PluginInstaller.GetInstalledVersion(definition);
                 if (installed != null && IsNewer(package.version, installed))
                 {
@@ -2343,10 +2437,33 @@ namespace MyVibe
                     throw new InvalidDataException("A catalog v2 plug-in is incompatible with this MyVibe version.");
                 CatalogPackage package = WindowsPackage(product, source.channel, true);
                 plugins.Add(package);
+                if (product.releases != null)
+                {
+                    if (product.releases.Length == 0 || !String.Equals(product.releases[0].version, product.version, StringComparison.OrdinalIgnoreCase))
+                        throw new InvalidDataException(product.name + " has invalid release history.");
+                    Version previous = null;
+                    HashSet<string> releaseVersions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    foreach (CatalogReleaseV2 release in product.releases)
+                    {
+                        Version releaseVersion;
+                        DateTime releasedAt;
+                        if (release == null || !Version.TryParse(release.version, out releaseVersion)
+                            || !DateTime.TryParseExact(release.releasedAt, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out releasedAt)
+                            || !releaseVersions.Add(release.version) || previous != null && releaseVersion >= previous)
+                            throw new InvalidDataException(product.name + " has invalid release history.");
+                        previous = releaseVersion;
+                        if (String.Equals(release.version, product.version, StringComparison.OrdinalIgnoreCase))
+                            continue;
+                        CatalogProductV2 historical = new CatalogProductV2
+                        {
+                            id = product.id, name = product.name, version = release.version, description = product.description,
+                            host = product.host, hostVersion = product.hostVersion, minimumManagerVersion = product.minimumManagerVersion,
+                            artifacts = release.artifacts
+                        };
+                        plugins.Add(WindowsPackage(historical, source.channel, true));
+                    }
+                }
             }
-            foreach (PluginDefinition definition in PluginRegistry.All)
-                if (!plugins.Any(delegate(CatalogPackage package) { return String.Equals(package.id, definition.Id, StringComparison.OrdinalIgnoreCase); }))
-                    throw new InvalidDataException(definition.Name + " is missing from catalog v2.");
             converted.plugins = plugins.ToArray();
             return converted;
         }
@@ -2368,9 +2485,11 @@ namespace MyVibe
                     throw new InvalidDataException(product.name + " has no Windows x64 package.");
                 return null;
             }
-            if (artifact.signature == null || !String.Equals(artifact.signature.type, "authenticode", StringComparison.OrdinalIgnoreCase)
+            PluginDefinition definition = PluginRegistry.Find(product.id);
+            string expectedSignature = definition != null && !definition.HasNative ? "adobe-cep" : "authenticode";
+            if (artifact.signature == null || !String.Equals(artifact.signature.type, expectedSignature, StringComparison.OrdinalIgnoreCase)
                 || String.Equals(channel, "stable", StringComparison.OrdinalIgnoreCase) && !artifact.signature.required
-                || artifact.signature.required && !Regex.IsMatch(artifact.signature.signerThumbprint ?? String.Empty, "^[a-fA-F0-9]{40,64}$"))
+                || artifact.signature.required && String.Equals(expectedSignature, "authenticode", StringComparison.OrdinalIgnoreCase) && !Regex.IsMatch(artifact.signature.signerThumbprint ?? String.Empty, "^[a-fA-F0-9]{40,64}$"))
                 throw new InvalidDataException(product.name + " has an invalid Windows signature policy.");
             CatalogPackage package = new CatalogPackage
             {
@@ -2381,7 +2500,7 @@ namespace MyVibe
                 architecture = artifact.architecture,
                 downloadUrl = artifact.downloadUrl,
                 sha256 = artifact.sha256,
-                authenticodeRequired = artifact.signature.required,
+                authenticodeRequired = artifact.signature.required && String.Equals(expectedSignature, "authenticode", StringComparison.OrdinalIgnoreCase),
                 signerThumbprint = artifact.signature.signerThumbprint,
                 host = product.host,
                 hostVersion = product.hostVersion,
@@ -2509,7 +2628,7 @@ namespace MyVibe
                 string partial = archive + ".partial";
                 using (WebClient client = new WebClient())
                 {
-                    client.Headers[HttpRequestHeader.UserAgent] = "MyVibe/0.4.0";
+                    client.Headers[HttpRequestHeader.UserAgent] = "MyVibe/0.5.0";
                     await client.DownloadFileTaskAsync(new Uri(package.downloadUrl), partial);
                 }
                 FileInfo managerArchive = new FileInfo(partial);

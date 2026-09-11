@@ -15,21 +15,22 @@
 
 ![MyVibe plugin manager](assets/myvibe-app.png)
 
-## Download MyVibe 0.4.0 beta
+## Download MyVibe 0.5.0 beta
 
 | Platform | Download | Requirements |
 | --- | --- | --- |
-| Windows | [Windows x64 ZIP](https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.4.0/MyVibe-0.4.0-beta.1-win-x64.zip) | Windows 10/11 x64 |
-| macOS | [Universal ZIP](https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.4.0/MyVibe-0.4.0-beta.1-macos-universal.zip) | macOS 13+, Apple silicon or Intel |
+| Windows | [Windows x64 ZIP](https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.5.0/MyVibe-0.5.0-beta.1-win-x64.zip) | Windows 10/11 x64 |
+| macOS | [Universal ZIP](https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.5.0/MyVibe-0.5.0-beta.1-macos-universal.zip) | macOS 13+, Apple silicon or Intel |
 
-SHA-256 files are published beside both downloads on the [release page](https://github.com/badrulmokhtar/myvibe/releases/tag/myvibe-v0.4.0).
+SHA-256 files are published beside both downloads on the [release page](https://github.com/badrulmokhtar/myvibe/releases/tag/myvibe-v0.5.0).
 
 > **Beta signing notice:** These builds are not yet signed with Windows Authenticode or Apple Developer ID. The operating system may show an Unknown Publisher or unidentified developer warning. MyVibe still requires a signed catalog, an official GitHub release URL, and an exact SHA-256 match before installation. See [Unsigned beta installation](docs/UNSIGNED-BETA.md).
 
 ## Managed plug-ins
 
-- **2.5D Transform 0.9.5** — editable X/Y/Z rotation and perspective views for Illustrator artwork.
-- **ToneMesh 0.9.8** — editable tone-driven vector fields with global or per-point paint, custom marks, structures, and contour handling.
+- **2.5D Transform 0.9.6** — editable X/Y/Z rotation and perspective views for Illustrator artwork.
+- **ToneMesh 0.9.9** — editable tone-driven vector fields with global or per-point paint, custom marks, structures, and contour handling.
+- **Logolize 1.6.4** — responsive, editable logo-system generation inside Illustrator.
 
 Each plug-in can be installed, updated, repaired, or removed independently.
 
@@ -73,9 +74,10 @@ Each plug-in can be installed, updated, repaired, or removed independently.
 | --- | --- |
 | Operating system | Windows 10/11 x64; macOS 13+ universal |
 | Adobe application | Illustrator 2026, version 30.x |
-| MyVibe | 0.4.0 beta |
-| 2.5D Transform | 0.9.5 beta |
-| ToneMesh | 0.9.8 beta |
+| MyVibe | 0.5.0 beta |
+| 2.5D Transform | 0.9.6 beta |
+| ToneMesh | 0.9.9 beta |
+| Logolize | 1.6.4 beta |
 
 ## Documentation
 

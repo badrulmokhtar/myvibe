@@ -1,28 +1,11 @@
 $ErrorActionPreference = 'Stop'
 
 $outputDir = Join-Path $PSScriptRoot 'bin'
-$payload = Join-Path $PSScriptRoot 'payload\2.5D Transform-0.9.5-beta.zip'
 $compiler = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe'
 
 if (-not (Test-Path -LiteralPath $compiler)) {
     throw 'The Windows C# compiler was not found.'
 }
-if (-not (Test-Path -LiteralPath $payload)) {
-    throw "Plugin payload not found: $payload"
-}
-
-Add-Type -AssemblyName System.IO.Compression
-Add-Type -AssemblyName System.IO.Compression.FileSystem
-$archive = [System.IO.Compression.ZipFile]::OpenRead($payload)
-try {
-    $names = @($archive.Entries | ForEach-Object FullName)
-    if (-not ($names -match '2\.5D Transform\.aip$')) { throw 'Payload is missing 2.5D Transform.aip.' }
-    if (-not ($names -match '2\.5D Transform[\\/]CSXS[\\/]manifest\.xml$')) { throw 'Payload is missing the CEP manifest.' }
-    if (-not ($names -match '2\.5D Transform[\\/]META-INF[\\/]signatures\.xml$')) { throw 'Payload is missing the CEP signature.' }
-} finally {
-    $archive.Dispose()
-}
-
 New-Item -ItemType Directory -Force -Path $outputDir | Out-Null
 
 $references = @(
@@ -42,7 +25,7 @@ $common = @(
     '/nologo',
     '/platform:x64',
     '/optimize+',
-    "/resource:$payload,MyVibe.Transform2D5.zip"
+    '/warn:4'
 )
 $referenceArgs = @($references | ForEach-Object { "/reference:$_" })
 $source = Join-Path $PSScriptRoot 'MyVibe.cs'

@@ -13,7 +13,7 @@ Use a clean Windows 10/11 x64 test profile with Illustrator 2026 and the Microso
 - Restart Illustrator and confirm both updated panels open and retain independent versions.
 - Close Illustrator, remove each plugin, and confirm the `.aip` and CEP folders are removed while backups remain under `%LOCALAPPDATA%\MyVibe\backups`.
 - Reinstall both plugins and repeat the Illustrator launch check.
-- From MyVibe 0.2, confirm the migration message leads to the manual 0.4.0 download.
+- From MyVibe 0.2, confirm the migration message leads to the manual 0.5.0 download.
 - From MyVibe 0.3.1, confirm the signed v1 catalog remains usable during rollback.
 - From MyVibe 0.3+, confirm a newer test manager downloads, restarts, marks itself healthy, and exposes the previous version in **Version history**.
 
