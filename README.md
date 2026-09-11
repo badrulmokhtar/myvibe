@@ -30,7 +30,9 @@ SHA-256 files are published beside both downloads on the [release page](https://
 
 - **2.5D Transform 0.9.6** — editable X/Y/Z rotation and perspective views for Illustrator artwork.
 - **ToneMesh 0.9.9** — editable tone-driven vector fields with global or per-point paint, custom marks, structures, and contour handling.
-- **Logolize 1.6.4** — responsive, editable logo-system generation inside Illustrator.
+- **[Logolize 1.6.4](https://github.com/badrulmokhtar/myvibe/releases/tag/logolize-v1.6.4)** — responsive, editable logo-system generation inside Illustrator.
+
+Logolize is a CEP-only plug-in, so the same verified package works on macOS and Windows. Its release package and SHA-256 checksum are published on the [Logolize 1.6.4 release page](https://github.com/badrulmokhtar/myvibe/releases/tag/logolize-v1.6.4).
 
 Each plug-in can be installed, updated, repaired, or removed independently.
 
