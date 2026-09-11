@@ -14,7 +14,7 @@ if (-not $SkipBuild) {
 }
 
 $dist = Join-Path $PSScriptRoot 'dist'
-$releaseName = if ($Stable) { 'MyVibe-0.4.0-win-x64' } else { 'MyVibe-0.4.0-beta.1-win-x64' }
+$releaseName = if ($Stable) { 'MyVibe-0.5.0-win-x64' } else { 'MyVibe-0.5.0-beta.1-win-x64' }
 $staging = Join-Path $dist $releaseName
 $archive = Join-Path $dist ($releaseName + '.zip')
 $archiveHash = $archive + '.sha256'

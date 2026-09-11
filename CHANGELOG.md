@@ -2,6 +2,20 @@
 
 All notable public changes are documented here. Releases follow semantic versioning.
 
+## [0.5.0] - 2026-09-11
+
+### Added
+
+- Logolize is now a managed CEP-only plug-in on Windows and macOS.
+- Verified release history lets users select an earlier GitHub artifact and roll back safely.
+- Windows CI validates shared panel lifecycle events for native Illustrator plug-ins.
+
+### Changed
+
+- MyVibe manager version is 0.5.0.
+- 2.5D Transform 0.9.6 and ToneMesh 0.9.9 pause native idle work while their CEP panels are hidden on both platforms.
+- Older catalog readers remain compatible because release history is additive.
+
 ## [0.4.0] - 2026-08-21
 
 ### Added

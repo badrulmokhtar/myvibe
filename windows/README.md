@@ -1,6 +1,6 @@
-# MyVibe 0.4.0
+# MyVibe 0.5.0
 
-MyVibe is a dependency-free Windows manager for **2.5D Transform 0.9.5** and **ToneMesh 0.9.8** for Adobe Illustrator 2026.
+MyVibe is a dependency-free Windows manager for **2.5D Transform 0.9.6**, **ToneMesh 0.9.9**, and **Logolize 1.6.4** for Adobe Illustrator 2026. The verified release selector can install the latest build or roll back to an earlier GitHub release.
 
 ## Build
 
@@ -53,7 +53,7 @@ powershell -ExecutionPolicy Bypass -File .\myvibe\build-release.ps1
 
 ## Upgrading from 0.2
 
-MyVibe 0.2 detects the newer manager but does not replace its own unsigned executable. Download MyVibe 0.4.0 from the official GitHub release, extract it to a writable user folder, and run `MyVibe.exe`. Starting with 0.3, future verified manager updates can install and restart in-app.
+MyVibe 0.2 detects the newer manager but does not replace its own unsigned executable. Download MyVibe 0.5.0 from the official GitHub release, extract it to a writable user folder, and run `MyVibe.exe`. Starting with 0.3, future verified manager updates can install and restart in-app.
 
 ## Release verification
 

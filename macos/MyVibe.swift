@@ -3,7 +3,7 @@ import CryptoKit
 import Foundation
 import Security
 
-private let managerVersion = "0.4.0"
+private let managerVersion = "0.5.0"
 private let trustedReleasePrefix = "/badrulmokhtar/myvibe/releases/download/"
 private let maxArchiveBytes: Int64 = 200 * 1024 * 1024
 private let maxExtractedBytes: Int64 = 600 * 1024 * 1024
@@ -16,26 +16,27 @@ struct RegistryProduct {
     let name: String
     let version: String
     let description: String
-    let nativeName: String
+    let nativeName: String?
     let cepName: String
 }
 
 enum Registry {
     static let products = [
-        RegistryProduct(id: "com.badru.transform2d5", name: "2.5D Transform", version: "0.9.5", description: "Non-destructive 2.5D transforms for Adobe Illustrator.", nativeName: "2.5D Transform.aip", cepName: "2.5D Transform"),
-        RegistryProduct(id: "com.badru.tonemesh", name: "ToneMesh", version: "0.9.8", description: "Editable tone-driven vector fields for Adobe Illustrator.", nativeName: "ToneMesh.aip", cepName: "ToneMesh")
+        RegistryProduct(id: "com.badru.transform2d5", name: "2.5D Transform", version: "0.9.6", description: "Non-destructive 2.5D transforms for Adobe Illustrator.", nativeName: "2.5D Transform.aip", cepName: "2.5D Transform"),
+        RegistryProduct(id: "com.badru.tonemesh", name: "ToneMesh", version: "0.9.9", description: "Editable tone-driven vector fields for Adobe Illustrator.", nativeName: "ToneMesh.aip", cepName: "ToneMesh"),
+        RegistryProduct(id: "com.badru.logolize", name: "Logolize", version: "1.6.4", description: "Generate responsive, editable logo systems in Illustrator.", nativeName: nil, cepName: "Logolize")
     ]
 
     static func product(id: String) -> RegistryProduct? { products.first { $0.id == id } }
 }
 
-struct SignaturePolicy: Codable {
+struct SignaturePolicy: Codable, Equatable {
     let type: String
     let required: Bool
     let teamIdentifier: String?
 }
 
-struct Artifact: Codable {
+struct Artifact: Codable, Equatable {
     let platform: String
     let architecture: String
     let downloadUrl: String
@@ -52,6 +53,18 @@ struct Product: Codable, Identifiable {
     let host: String?
     let hostVersion: String?
     let minimumManagerVersion: String?
+    let releases: [ProductRelease]?
+
+    func selecting(_ release: ProductRelease) -> Product {
+        Product(id: id, name: name, version: release.version, artifacts: release.artifacts, description: description,
+                host: host, hostVersion: hostVersion, minimumManagerVersion: minimumManagerVersion, releases: releases)
+    }
+}
+
+struct ProductRelease: Codable {
+    let version: String
+    let releasedAt: String
+    let artifacts: [Artifact]
 }
 
 struct Catalog: Codable {
@@ -82,10 +95,10 @@ enum Safety {
             $0.platform == "macos" && ($0.architecture == "universal" || $0.architecture == arch)
         }) else { throw MyVibeError.invalid("\(product.name) has no compatible macOS artifact.") }
         guard trustedReleaseURL(artifact.downloadUrl), artifact.sha256.range(of: "^[A-Fa-f0-9]{64}$", options: .regularExpression) != nil,
-              artifact.signature.type == "developer-id" else {
+              ["developer-id", "adobe-cep"].contains(artifact.signature.type) else {
             throw MyVibeError.invalid("\(product.name) has unsafe catalog metadata.")
         }
-        if artifact.signature.required && artifact.signature.teamIdentifier?.range(of: "^[A-Z0-9]{10}$", options: .regularExpression) == nil {
+        if artifact.signature.required && artifact.signature.type == "developer-id" && artifact.signature.teamIdentifier?.range(of: "^[A-Z0-9]{10}$", options: .regularExpression) == nil {
             throw MyVibeError.invalid("\(product.name) is missing its required Developer ID team.")
         }
         return artifact
@@ -106,15 +119,33 @@ enum Safety {
                   product.version.range(of: "^\\d+\\.\\d+\\.\\d+$", options: .regularExpression) != nil else {
                 throw MyVibeError.invalid("\(product.name) has an invalid version.")
             }
-            let artifact = try artifact(for: product)
-            if catalog.channel == "stable" && !artifact.signature.required {
-                throw MyVibeError.invalid("Stable artifacts must require a Developer ID signature.")
+            let selectedArtifact = try artifact(for: product)
+            if catalog.channel == "stable" && !selectedArtifact.signature.required {
+                throw MyVibeError.invalid("Stable artifacts must require a trusted signature.")
+            }
+            if let releases = product.releases {
+                guard releases.first?.version == product.version,
+                      releases.first?.artifacts == product.artifacts,
+                      Set(releases.map(\.version)).count == releases.count,
+                      zip(releases, releases.dropFirst()).allSatisfy({ pair in pair.0.version.compare(pair.1.version, options: .numeric) == .orderedDescending }) else {
+                    throw MyVibeError.invalid("\(product.name) has invalid release history.")
+                }
+                for release in releases {
+                    guard release.version.range(of: "^\\d+\\.\\d+\\.\\d+$", options: .regularExpression) != nil,
+                          release.releasedAt.range(of: "^\\d{4}-\\d{2}-\\d{2}$", options: .regularExpression) != nil else {
+                        throw MyVibeError.invalid("\(product.name) has invalid release metadata.")
+                    }
+                    let historicalArtifact = try artifact(for: product.selecting(release))
+                    if catalog.channel == "stable" && !historicalArtifact.signature.required {
+                        throw MyVibeError.invalid("Stable release history must require a trusted signature.")
+                    }
+                }
             }
         }
         guard catalog.plugins.allSatisfy({
             $0.host == "Adobe Illustrator" && $0.hostVersion == "30.x"
                 && $0.minimumManagerVersion?.range(of: "^\\d+\\.\\d+\\.\\d+$", options: .regularExpression) != nil
-        }), Registry.products.allSatisfy({ entry in catalog.plugins.contains { $0.id == entry.id } }) else {
+        }) else {
             throw MyVibeError.invalid("The catalog plug-in compatibility is invalid.")
         }
         return catalog
@@ -234,13 +265,12 @@ enum Installer {
         }
     }
 
-    static func payload(in root: URL, product: Product) throws -> (native: URL, cep: URL) {
+    static func payload(in root: URL, product: Product) throws -> (native: URL?, cep: URL) {
         guard let expected = Registry.product(id: product.id) else { throw MyVibeError.invalid("The catalog contains an unsupported plug-in.") }
         let urls = (FileManager.default.enumerator(at: root, includingPropertiesForKeys: nil)?.allObjects as? [URL]) ?? []
-        guard let native = urls.first(where: { $0.lastPathComponent == expected.nativeName }),
-              let cep = urls.first(where: { $0.lastPathComponent == expected.cepName && FileManager.default.fileExists(atPath: $0.appending(path: "CSXS/manifest.xml").path) }) else {
-            throw MyVibeError.invalid("\(product.name) is missing its expected native plug-in or CEP interface.")
-        }
+        let native = expected.nativeName.flatMap { name in urls.first(where: { $0.lastPathComponent == name }) }
+        guard expected.nativeName == nil || native != nil else { throw MyVibeError.invalid("\(product.name) is missing its expected native plug-in.") }
+        guard let cep = urls.first(where: { $0.lastPathComponent == expected.cepName && FileManager.default.fileExists(atPath: $0.appending(path: "CSXS/manifest.xml").path) }) else { throw MyVibeError.invalid("\(product.name) is missing its CEP interface.") }
         return (native, cep)
     }
 
@@ -251,26 +281,29 @@ enum Installer {
         defer { try? FileManager.default.removeItem(at: root) }
         let source = try payload(in: root, product: product)
         let artifact = try Safety.artifact(for: product)
-        if artifact.signature.required { try verifyDeveloperID(source.native, expectedTeam: artifact.signature.teamIdentifier!) }
+        if artifact.signature.required && artifact.signature.type == "developer-id" { try verifyDeveloperID(source.native!, expectedTeam: artifact.signature.teamIdentifier!) }
+        if artifact.signature.required && artifact.signature.type == "adobe-cep" && !FileManager.default.fileExists(atPath: source.cep.appending(path: "META-INF/signatures.xml").path) { throw MyVibeError.invalid("The CEP signature is missing.") }
         let safeName = product.id.replacingOccurrences(of: "[^A-Za-z0-9._-]", with: "-", options: .regularExpression)
         let backup = backups.appending(path: "\(safeName)-\(Int(Date().timeIntervalSince1970))")
         try FileManager.default.createDirectory(at: backup, withIntermediateDirectories: true)
-        let nativeTarget = pluginRoot.appending(path: source.native.lastPathComponent)
+        let nativeTarget = source.native.map { pluginRoot.appending(path: $0.lastPathComponent) }
         let cepTarget = cepRoot.appending(path: source.cep.lastPathComponent)
         if FileManager.default.fileExists(atPath: cepTarget.path) { try FileManager.default.copyItem(at: cepTarget, to: backup.appending(path: "CEP")) }
-        if FileManager.default.fileExists(atPath: nativeTarget.path) {
-            _ = try admin("/bin/cp", ["-R", nativeTarget.path, backup.appending(path: source.native.lastPathComponent).path])
+        if let nativeTarget, let native = source.native, FileManager.default.fileExists(atPath: nativeTarget.path) {
+            _ = try admin("/bin/cp", ["-R", nativeTarget.path, backup.appending(path: native.lastPathComponent).path])
         }
         do {
             try FileManager.default.createDirectory(at: cepRoot, withIntermediateDirectories: true)
             try? FileManager.default.removeItem(at: cepTarget)
             try FileManager.default.copyItem(at: source.cep, to: cepTarget)
-            _ = try admin("/bin/mkdir", ["-p", pluginRoot.path])
-            _ = try admin("/bin/rm", ["-rf", nativeTarget.path])
-            _ = try admin("/bin/cp", ["-R", source.native.path, nativeTarget.path])
-            if artifact.signature.required { try verifyDeveloperID(nativeTarget, expectedTeam: artifact.signature.teamIdentifier!) }
+            if let nativeTarget, let native = source.native {
+                _ = try admin("/bin/mkdir", ["-p", pluginRoot.path])
+                _ = try admin("/bin/rm", ["-rf", nativeTarget.path])
+                _ = try admin("/bin/cp", ["-R", native.path, nativeTarget.path])
+                if artifact.signature.required && artifact.signature.type == "developer-id" { try verifyDeveloperID(nativeTarget, expectedTeam: artifact.signature.teamIdentifier!) }
+                _ = try? admin("/usr/bin/xattr", ["-dr", "com.apple.quarantine", nativeTarget.path])
+            }
             _ = try? run("/usr/bin/xattr", ["-dr", "com.apple.quarantine", cepTarget.path])
-            _ = try? admin("/usr/bin/xattr", ["-dr", "com.apple.quarantine", nativeTarget.path])
             if !artifact.signature.required && !FileManager.default.fileExists(atPath: cepTarget.appending(path: "META-INF/signatures.xml").path) {
                 _ = try run("/usr/bin/defaults", ["write", "com.adobe.CSXS.12", "PlayerDebugMode", "1"])
             }
@@ -279,9 +312,11 @@ enum Installer {
                 if FileManager.default.fileExists(atPath: cepTarget.path) { try FileManager.default.removeItem(at: cepTarget) }
                 let oldCEP = backup.appending(path: "CEP")
                 if FileManager.default.fileExists(atPath: oldCEP.path) { try FileManager.default.copyItem(at: oldCEP, to: cepTarget) }
-                _ = try admin("/bin/rm", ["-rf", nativeTarget.path])
-                let oldNative = backup.appending(path: source.native.lastPathComponent)
-                if FileManager.default.fileExists(atPath: oldNative.path) { _ = try admin("/bin/cp", ["-R", oldNative.path, nativeTarget.path]) }
+                if let nativeTarget, let native = source.native {
+                    _ = try admin("/bin/rm", ["-rf", nativeTarget.path])
+                    let oldNative = backup.appending(path: native.lastPathComponent)
+                    if FileManager.default.fileExists(atPath: oldNative.path) { _ = try admin("/bin/cp", ["-R", oldNative.path, nativeTarget.path]) }
+                }
             } catch {
                 throw MyVibeError.invalid("Installation failed and rollback also failed. Recovery backup: \(backup.path)")
             }
@@ -290,8 +325,12 @@ enum Installer {
     }
 
     static func installedParts(for entry: RegistryProduct) -> (native: Bool, cep: Bool) {
-        (FileManager.default.fileExists(atPath: pluginRoot.appending(path: entry.nativeName).path),
+        (entry.nativeName.map { FileManager.default.fileExists(atPath: pluginRoot.appending(path: $0).path) } ?? false,
          FileManager.default.fileExists(atPath: cepRoot.appending(path: entry.cepName).path))
+    }
+
+    static func installationComplete(_ parts: (native: Bool, cep: Bool), for entry: RegistryProduct) -> Bool {
+        parts.cep && (entry.nativeName == nil || parts.native)
     }
 
     static func installedVersion(for entry: RegistryProduct) -> String? {
@@ -303,7 +342,7 @@ enum Installer {
 
     static func remove(entry: RegistryProduct) throws {
         guard !illustratorRunning() else { throw MyVibeError.invalid("Close Illustrator, then try again.") }
-        let nativeTarget = pluginRoot.appending(path: entry.nativeName)
+        let nativeTarget = entry.nativeName.map { pluginRoot.appending(path: $0) }
         let cepTarget = cepRoot.appending(path: entry.cepName)
         let parts = installedParts(for: entry)
         guard parts.native || parts.cep else { throw MyVibeError.invalid("\(entry.name) is not installed.") }
@@ -311,18 +350,18 @@ enum Installer {
         let safeName = entry.id.replacingOccurrences(of: "[^A-Za-z0-9._-]", with: "-", options: .regularExpression)
         let backup = backups.appending(path: "\(safeName)-before-remove-\(Int(Date().timeIntervalSince1970))")
         try FileManager.default.createDirectory(at: backup, withIntermediateDirectories: true)
-        let nativeBackup = backup.appending(path: entry.nativeName)
+        let nativeBackup = entry.nativeName.map { backup.appending(path: $0) }
         let cepBackup = backup.appending(path: "CEP")
         if parts.cep { try FileManager.default.copyItem(at: cepTarget, to: cepBackup) }
-        if parts.native { _ = try admin("/bin/cp", ["-R", nativeTarget.path, nativeBackup.path]) }
+        if let nativeTarget, let nativeBackup, parts.native { _ = try admin("/bin/cp", ["-R", nativeTarget.path, nativeBackup.path]) }
 
         do {
             if parts.cep { try FileManager.default.removeItem(at: cepTarget) }
-            if parts.native { _ = try admin("/bin/rm", ["-rf", nativeTarget.path]) }
+            if let nativeTarget, parts.native { _ = try admin("/bin/rm", ["-rf", nativeTarget.path]) }
         } catch {
             do {
                 if parts.cep && !FileManager.default.fileExists(atPath: cepTarget.path) { try FileManager.default.copyItem(at: cepBackup, to: cepTarget) }
-                if parts.native && !FileManager.default.fileExists(atPath: nativeTarget.path) { _ = try admin("/bin/cp", ["-R", nativeBackup.path, nativeTarget.path]) }
+                if let nativeTarget, let nativeBackup, parts.native && !FileManager.default.fileExists(atPath: nativeTarget.path) { _ = try admin("/bin/cp", ["-R", nativeBackup.path, nativeTarget.path]) }
             } catch {
                 throw MyVibeError.invalid("Removal failed and rollback also failed. Recovery backup: \(backup.path)")
             }
@@ -427,6 +466,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDataSource,
     private let refreshButton = NSButton(title: "Check for updates", target: nil, action: nil)
     private let installButton = NSButton(title: "Install / Update", target: nil, action: nil)
     private let removeButton = NSButton(title: "Remove", target: nil, action: nil)
+    private let versionPicker = NSPopUpButton(frame: .zero, pullsDown: false)
     private var catalog: Catalog?
     private var busy = false
 
@@ -441,13 +481,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDataSource,
         let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier("plugin")); column.title = "Available plug-ins"; column.width = 680
         table.addTableColumn(column); table.delegate = self; table.dataSource = self; table.rowHeight = 44
         let scroll = NSScrollView(); scroll.documentView = table; scroll.hasVerticalScroller = true
-        let actions = NSStackView(views: [installButton, removeButton]); actions.orientation = .horizontal; actions.spacing = 12
+        versionPicker.target = self; versionPicker.action = #selector(versionChanged)
+        let actions = NSStackView(views: [versionPicker, installButton, removeButton]); actions.orientation = .horizontal; actions.spacing = 12
         let stack = NSStackView(views: [refreshButton, scroll, actions, status]); stack.orientation = .vertical; stack.spacing = 12; stack.edgeInsets = NSEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         window.contentView = stack
         window.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         table.reloadData()
         table.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
+        updateVersionPicker()
         updateButtons()
         loadLocalCatalog()
         refreshCatalog()
@@ -460,11 +502,38 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDataSource,
         let parts = Installer.installedParts(for: entry)
         let installedVersion = Installer.installedVersion(for: entry)
         let update = installedVersion.map { (product?.version ?? entry.version).compare($0, options: .numeric) == .orderedDescending } == true
-        let installed = parts.native && parts.cep ? " — Installed \(installedVersion ?? "unknown")\(update ? " — Update available" : "")" : (parts.native || parts.cep ? " — Repair needed" : "")
+        let installed = Installer.installationComplete(parts, for: entry) ? " — Installed \(installedVersion ?? "unknown")\(update ? " — Update available" : "")" : (parts.native || parts.cep ? " — Repair needed" : "")
         return NSTextField(labelWithString: "\(product?.name ?? entry.name) \(product?.version ?? entry.version)\(installed)\n\(product?.description ?? entry.description)")
     }
 
-    func tableViewSelectionDidChange(_ notification: Notification) { updateButtons() }
+    func tableViewSelectionDidChange(_ notification: Notification) { updateVersionPicker(); updateButtons() }
+
+    private func selectableProducts(for product: Product) -> [Product] {
+        guard let releases = product.releases, !releases.isEmpty else { return [product] }
+        return releases.map { product.selecting($0) }
+    }
+
+    private func selectedProduct() -> Product? {
+        guard table.selectedRow >= 0,
+              let product = catalog?.plugins.first(where: { $0.id == Registry.products[table.selectedRow].id }) else { return nil }
+        let choices = selectableProducts(for: product)
+        return choices.indices.contains(versionPicker.indexOfSelectedItem) ? choices[versionPicker.indexOfSelectedItem] : choices.first
+    }
+
+    private func updateVersionPicker() {
+        versionPicker.removeAllItems()
+        guard table.selectedRow >= 0,
+              let product = catalog?.plugins.first(where: { $0.id == Registry.products[table.selectedRow].id }) else {
+            versionPicker.addItem(withTitle: "No verified releases")
+            versionPicker.isEnabled = false
+            return
+        }
+        versionPicker.addItems(withTitles: selectableProducts(for: product).map { "Version \($0.version)" })
+        versionPicker.selectItem(at: 0)
+        versionPicker.isEnabled = !busy && versionPicker.numberOfItems > 1
+    }
+
+    @objc private func versionChanged() { updateButtons() }
 
     private func loadLocalCatalog() {
         if let cached = try? CatalogLoader.cached() {
@@ -479,6 +548,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDataSource,
         catalog = verified
         status.stringValue = message
         table.reloadData()
+        updateVersionPicker()
         updateButtons()
     }
 
@@ -504,7 +574,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDataSource,
         guard !busy else { return }
         guard table.selectedRow >= 0 else { status.stringValue = "Select a plug-in first."; return }
         let entry = Registry.products[table.selectedRow]
-        guard let product = catalog?.plugins.first(where: { $0.id == entry.id }) else {
+        guard let product = selectedProduct() else {
             status.stringValue = "\(entry.name) cannot be installed until its verified package is published."
             NSSound.beep()
             return
@@ -521,7 +591,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDataSource,
                 do {
                     let archive = try await Installer.download(artifact) { _ in }
                     try await Task.detached { try Installer.install(product: product, archive: archive) }.value
-                    status.stringValue = "Installed \(product.name) \(product.version). Restart Illustrator."
+                    let previous = Installer.installedVersion(for: entry)
+                    let verb = previous.map { product.version.compare($0, options: .numeric) == .orderedAscending ? "Rolled back" : "Installed" } ?? "Installed"
+                    status.stringValue = "\(verb) \(product.name) \(product.version). Restart Illustrator."
                     table.reloadData(); updateButtons()
                 } catch { show(error) }
                 setBusy(false)
@@ -552,15 +624,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDataSource,
         let entry = Registry.products[table.selectedRow]
         let parts = Installer.installedParts(for: entry)
         let installedVersion = Installer.installedVersion(for: entry)
-        let availableVersion = catalog?.plugins.first { $0.id == entry.id }?.version ?? entry.version
+        let availableVersion = selectedProduct()?.version ?? catalog?.plugins.first { $0.id == entry.id }?.version ?? entry.version
         installButton.isEnabled = !busy
-        installButton.title = parts.native && parts.cep ? (installedVersion.map { availableVersion.compare($0, options: .numeric) == .orderedDescending } == true ? "Update" : "Reinstall") : (parts.native || parts.cep ? "Repair" : "Install")
+        installButton.title = Installer.installationComplete(parts, for: entry) ? (installedVersion.map { availableVersion.compare($0, options: .numeric) == .orderedDescending } == true ? "Update" : (installedVersion.map { availableVersion.compare($0, options: .numeric) == .orderedAscending } == true ? "Roll Back" : "Reinstall")) : (parts.native || parts.cep ? "Repair" : "Install")
         removeButton.isEnabled = !busy && (parts.native || parts.cep)
     }
 
     private func setBusy(_ value: Bool) {
         busy = value
         refreshButton.isEnabled = !value
+        versionPicker.isEnabled = !value && versionPicker.numberOfItems > 1
         updateButtons()
     }
 
@@ -571,9 +644,10 @@ func selfTest() throws {
     guard Safety.trustedReleaseURL("https://github.com/badrulmokhtar/myvibe/releases/download/test/file.zip"),
           !Safety.trustedReleaseURL("https://github.com/attacker/myvibe/releases/download/test/file.zip"),
           !Safety.trustedReleaseURL("http://github.com/badrulmokhtar/myvibe/releases/download/test/file.zip"),
-          Registry.products.map(\.id) == ["com.badru.transform2d5", "com.badru.tonemesh"],
+          Registry.products.map(\.id) == ["com.badru.transform2d5", "com.badru.tonemesh", "com.badru.logolize"],
           Registry.product(id: "com.badru.transform2d5")?.nativeName == "2.5D Transform.aip",
           Registry.product(id: "com.badru.tonemesh")?.cepName == "ToneMesh",
+          Registry.product(id: "com.badru.logolize")?.nativeName == nil,
           Registry.product(id: "com.badru.unknown") == nil,
           shellQuote("a'b") == "'a'\\''b'",
           let pem = Bundle.main.url(forResource: "catalog-public-key", withExtension: "pem"),
