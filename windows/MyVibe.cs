@@ -1706,7 +1706,7 @@ namespace MyVibe
                 backup = BackupCurrent(plugin, "before-update");
                 DeleteCurrent(plugin);
                 using (FileStream stream = new FileStream(packagePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    ExtractPayload(plugin, stream);
+                    ExtractPayload(plugin, stream, CatalogClient.IsCepSignatureRequired(plugin.Id, version, expectedSha256));
                 WriteVersionRecord(plugin, version);
                 ClearCepCache(plugin);
                 return OperationResult.Ok("Installed " + plugin.Name + " " + version + ". Restart Illustrator to load the plugin.");
@@ -1924,11 +1924,11 @@ namespace MyVibe
             {
                 if (stream == null)
                     throw new InvalidOperationException("The embedded plugin payload is missing.");
-                ExtractPayload(plugin, stream);
+                ExtractPayload(plugin, stream, true);
             }
         }
 
-        private static void ExtractPayload(PluginDefinition plugin, Stream stream)
+        private static void ExtractPayload(PluginDefinition plugin, Stream stream, bool requireCepSignature)
         {
             string aipPath = GetAipPath(plugin);
             string cepPath = GetCepPath(plugin);
@@ -1946,8 +1946,10 @@ namespace MyVibe
                         throw new InvalidDataException("The native .aip engine is missing from the payload.");
                     bool manifest = archive.Entries.Any(delegate(ZipArchiveEntry entry) { return Normalize(entry.FullName).EndsWith(cepMarker + "CSXS/manifest.xml", StringComparison.OrdinalIgnoreCase); });
                     bool signature = archive.Entries.Any(delegate(ZipArchiveEntry entry) { return Normalize(entry.FullName).EndsWith(cepMarker + "META-INF/signatures.xml", StringComparison.OrdinalIgnoreCase); });
-                    if (!manifest || !signature)
-                        throw new InvalidDataException("The plugin payload does not contain a signed CEP interface.");
+                    if (!manifest || requireCepSignature && !signature)
+                        throw new InvalidDataException(requireCepSignature
+                            ? "The plugin payload does not contain a signed CEP interface."
+                            : "The plugin payload does not contain a CEP interface.");
                     long extractedBytes = aip == null ? 0 : aip.Length;
                     if (extractedBytes > MaxPluginExtractedBytes)
                         throw new InvalidDataException("The plugin payload is too large after extraction.");
@@ -2148,6 +2150,7 @@ namespace MyVibe
         public string downloadUrl;
         public string sha256;
         public bool authenticodeRequired;
+        public bool cepSignatureRequired;
         public string host;
         public string hostVersion;
         public string minimumManagerVersion;
@@ -2317,6 +2320,28 @@ namespace MyVibe
             catch
             {
                 return false;
+            }
+        }
+
+        internal static bool IsCepSignatureRequired(string pluginId, string version, string sha256)
+        {
+            try
+            {
+                PublicCatalog catalog = LoadVerifiedCachedCatalog();
+                CatalogPackage package = catalog.plugins.FirstOrDefault(delegate(CatalogPackage item)
+                {
+                    return String.Equals(item.id, pluginId, StringComparison.OrdinalIgnoreCase)
+                        && String.Equals(item.version, version, StringComparison.OrdinalIgnoreCase)
+                        && String.Equals(item.sha256, sha256, StringComparison.OrdinalIgnoreCase);
+                });
+                if (package == null)
+                    return true;
+                PluginDefinition definition = PluginRegistry.Find(pluginId);
+                return definition == null || definition.HasNative || package.cepSignatureRequired || catalog.schemaVersion != 2;
+            }
+            catch
+            {
+                return true;
             }
         }
 
@@ -2501,6 +2526,7 @@ namespace MyVibe
                 downloadUrl = artifact.downloadUrl,
                 sha256 = artifact.sha256,
                 authenticodeRequired = artifact.signature.required && String.Equals(expectedSignature, "authenticode", StringComparison.OrdinalIgnoreCase),
+                cepSignatureRequired = artifact.signature.required && String.Equals(expectedSignature, "adobe-cep", StringComparison.OrdinalIgnoreCase),
                 signerThumbprint = artifact.signature.signerThumbprint,
                 host = product.host,
                 hostVersion = product.hostVersion,
