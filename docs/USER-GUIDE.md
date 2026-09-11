@@ -35,7 +35,7 @@ Logolize is CEP-only: it installs its CEP interface without a native `.aip` engi
 
 2.5D Transform adds live X, Y, Z, and perspective controls for editable Illustrator artwork. It supports paths, compound paths, Pathfinder results, groups, clipping groups, live text, symbols, gradients, raster images, and placed images.
 
-ToneMesh creates editable tone-driven vector fields from solid fills, gradients, and mesh gradients. It includes multiple structures and marks, custom marks, appearance handles, and contour-aware edge behavior.
+ToneMesh creates editable tone-driven vector fields from solid fills, gradients, and mesh gradients. It includes multiple structures and marks, custom marks, appearance handles, contour-aware edge behavior, and pauses selection monitoring while its panel is hidden.
 
 Logolize generates responsive, editable logo systems with grid, clear-space, construction, and mark controls.
 
