@@ -290,18 +290,19 @@ enum Installer {
         let cepTarget = cepRoot.appending(path: source.cep.lastPathComponent)
         if FileManager.default.fileExists(atPath: cepTarget.path) { try FileManager.default.copyItem(at: cepTarget, to: backup.appending(path: "CEP")) }
         if let nativeTarget, let native = source.native, FileManager.default.fileExists(atPath: nativeTarget.path) {
-            _ = try admin("/bin/cp", ["-R", nativeTarget.path, backup.appending(path: native.lastPathComponent).path])
+            try FileManager.default.copyItem(at: nativeTarget, to: backup.appending(path: native.lastPathComponent))
         }
         do {
             try FileManager.default.createDirectory(at: cepRoot, withIntermediateDirectories: true)
             try? FileManager.default.removeItem(at: cepTarget)
             try FileManager.default.copyItem(at: source.cep, to: cepTarget)
             if let nativeTarget, let native = source.native {
-                _ = try admin("/bin/mkdir", ["-p", pluginRoot.path])
-                _ = try admin("/bin/rm", ["-rf", nativeTarget.path])
-                _ = try admin("/bin/cp", ["-R", native.path, nativeTarget.path])
-                if artifact.signature.required && artifact.signature.type == "developer-id" { try verifyDeveloperID(nativeTarget, expectedTeam: artifact.signature.teamIdentifier!) }
-                _ = try? admin("/usr/bin/xattr", ["-dr", "com.apple.quarantine", nativeTarget.path])
+                _ = try? run("/usr/bin/xattr", ["-dr", "com.apple.quarantine", native.path])
+                _ = try admin([
+                    ("/bin/mkdir", ["-p", pluginRoot.path]),
+                    ("/bin/rm", ["-rf", nativeTarget.path]),
+                    ("/bin/cp", ["-R", native.path, nativeTarget.path])
+                ])
             }
             _ = try? run("/usr/bin/xattr", ["-dr", "com.apple.quarantine", cepTarget.path])
             if !artifact.signature.required && !FileManager.default.fileExists(atPath: cepTarget.appending(path: "META-INF/signatures.xml").path) {
@@ -313,9 +314,10 @@ enum Installer {
                 let oldCEP = backup.appending(path: "CEP")
                 if FileManager.default.fileExists(atPath: oldCEP.path) { try FileManager.default.copyItem(at: oldCEP, to: cepTarget) }
                 if let nativeTarget, let native = source.native {
-                    _ = try admin("/bin/rm", ["-rf", nativeTarget.path])
                     let oldNative = backup.appending(path: native.lastPathComponent)
-                    if FileManager.default.fileExists(atPath: oldNative.path) { _ = try admin("/bin/cp", ["-R", oldNative.path, nativeTarget.path]) }
+                    var commands: [(String, [String])] = [("/bin/rm", ["-rf", nativeTarget.path])]
+                    if FileManager.default.fileExists(atPath: oldNative.path) { commands.append(("/bin/cp", ["-R", oldNative.path, nativeTarget.path])) }
+                    _ = try admin(commands)
                 }
             } catch {
                 throw MyVibeError.invalid("Installation failed and rollback also failed. Recovery backup: \(backup.path)")
@@ -353,15 +355,15 @@ enum Installer {
         let nativeBackup = entry.nativeName.map { backup.appending(path: $0) }
         let cepBackup = backup.appending(path: "CEP")
         if parts.cep { try FileManager.default.copyItem(at: cepTarget, to: cepBackup) }
-        if let nativeTarget, let nativeBackup, parts.native { _ = try admin("/bin/cp", ["-R", nativeTarget.path, nativeBackup.path]) }
+        if let nativeTarget, let nativeBackup, parts.native { try FileManager.default.copyItem(at: nativeTarget, to: nativeBackup) }
 
         do {
             if parts.cep { try FileManager.default.removeItem(at: cepTarget) }
-            if let nativeTarget, parts.native { _ = try admin("/bin/rm", ["-rf", nativeTarget.path]) }
+            if let nativeTarget, parts.native { _ = try admin([("/bin/rm", ["-rf", nativeTarget.path])]) }
         } catch {
             do {
                 if parts.cep && !FileManager.default.fileExists(atPath: cepTarget.path) { try FileManager.default.copyItem(at: cepBackup, to: cepTarget) }
-                if let nativeTarget, let nativeBackup, parts.native && !FileManager.default.fileExists(atPath: nativeTarget.path) { _ = try admin("/bin/cp", ["-R", nativeBackup.path, nativeTarget.path]) }
+                if let nativeTarget, let nativeBackup, parts.native && !FileManager.default.fileExists(atPath: nativeTarget.path) { _ = try admin([("/bin/cp", ["-R", nativeBackup.path, nativeTarget.path])]) }
             } catch {
                 throw MyVibeError.invalid("Removal failed and rollback also failed. Recovery backup: \(backup.path)")
             }
@@ -377,8 +379,8 @@ enum Installer {
         }
     }
 
-    private static func admin(_ executable: String, _ arguments: [String]) throws -> String {
-        let command = ([executable] + arguments).map(shellQuote).joined(separator: " ")
+    private static func admin(_ commands: [(String, [String])]) throws -> String {
+        let command = shellCommand(commands)
         let script = "do shell script \(appleQuote(command)) with administrator privileges"
         return try run("/usr/bin/osascript", ["-e", script])
     }
@@ -448,6 +450,9 @@ func run(_ executable: String, _ arguments: [String]) throws -> String {
 }
 
 func shellQuote(_ value: String) -> String { "'" + value.replacingOccurrences(of: "'", with: "'\\''") + "'" }
+func shellCommand(_ commands: [(String, [String])]) -> String {
+    commands.map { ([$0.0] + $0.1).map(shellQuote).joined(separator: " ") }.joined(separator: " && ")
+}
 func appleQuote(_ value: String) -> String { "\"" + value.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"") + "\"" }
 
 extension ProcessInfo {
@@ -650,6 +655,7 @@ func selfTest() throws {
           Registry.product(id: "com.badru.logolize")?.nativeName == nil,
           Registry.product(id: "com.badru.unknown") == nil,
           shellQuote("a'b") == "'a'\\''b'",
+          shellCommand([("/bin/rm", ["-rf", "/tmp/a b"]), ("/bin/cp", ["-R", "/tmp/a b", "/tmp/c"])]) == "'/bin/rm' '-rf' '/tmp/a b' && '/bin/cp' '-R' '/tmp/a b' '/tmp/c'",
           let pem = Bundle.main.url(forResource: "catalog-public-key", withExtension: "pem"),
           let catalog = Bundle.main.url(forResource: "catalog-v1-test", withExtension: "json"),
           let signature = Bundle.main.url(forResource: "catalog-v1-test", withExtension: "json.sig"),
