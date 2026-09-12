@@ -133,6 +133,53 @@
           ]
         }
       ]
+    },
+    {
+      "id": "com.badru.logolize",
+      "name": "Logolize",
+      "version": "1.6.4",
+      "description": "Generate responsive, editable logo systems in Illustrator.",
+      "host": "Adobe Illustrator",
+      "hostVersion": "30.x",
+      "minimumManagerVersion": "0.4.0",
+      "artifacts": [
+        {
+          "platform": "macos",
+          "architecture": "universal",
+          "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/logolize-v1.6.4/Logolize-1.6.4.zip",
+          "sha256": "4df3ac448776a8f9a934f650607c1840492bd4a6e492622cfff4ca4213bb95b0",
+          "signature": { "type": "adobe-cep", "required": false }
+        },
+        {
+          "platform": "windows",
+          "architecture": "x64",
+          "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/logolize-v1.6.4/Logolize-1.6.4.zip",
+          "sha256": "4df3ac448776a8f9a934f650607c1840492bd4a6e492622cfff4ca4213bb95b0",
+          "signature": { "type": "adobe-cep", "required": false }
+        }
+      ],
+      "releases": [
+        {
+          "version": "1.6.4",
+          "releasedAt": "2026-09-12",
+          "artifacts": [
+            {
+              "platform": "macos",
+              "architecture": "universal",
+              "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/logolize-v1.6.4/Logolize-1.6.4.zip",
+              "sha256": "4df3ac448776a8f9a934f650607c1840492bd4a6e492622cfff4ca4213bb95b0",
+              "signature": { "type": "adobe-cep", "required": false }
+            },
+            {
+              "platform": "windows",
+              "architecture": "x64",
+              "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/logolize-v1.6.4/Logolize-1.6.4.zip",
+              "sha256": "4df3ac448776a8f9a934f650607c1840492bd4a6e492622cfff4ca4213bb95b0",
+              "signature": { "type": "adobe-cep", "required": false }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
