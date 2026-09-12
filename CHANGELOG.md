@@ -17,6 +17,7 @@ All notable public changes are documented here. Releases follow semantic version
 - Older catalog readers remain compatible because release history is additive.
 - Logolize 1.6.4 is published as the first managed CEP-only release asset.
 - Windows and macOS lifecycle documentation now covers Logolize install, update, rollback, removal, and CEP-only behavior.
+- The macOS beta.2 package performs native plug-in replacement through one administrator authorization transaction instead of prompting once per file operation.
 
 ## [0.4.0] - 2026-08-21
 
