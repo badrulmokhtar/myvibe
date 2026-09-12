@@ -20,7 +20,7 @@
 | Platform | Download | Requirements |
 | --- | --- | --- |
 | Windows | [Windows x64 ZIP](https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.5.0/MyVibe-0.5.0-beta.1-win-x64.zip) | Windows 10/11 x64 |
-| macOS | [Universal ZIP](https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.5.0/MyVibe-0.5.0-beta.1-macos-universal.zip) | macOS 13+, Apple silicon or Intel |
+| macOS | [Universal ZIP](https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.5.0/MyVibe-0.5.0-beta.2-macos-universal.zip) | macOS 13+, Apple silicon or Intel |
 
 SHA-256 files are published beside both downloads on the [release page](https://github.com/badrulmokhtar/myvibe/releases/tag/myvibe-v0.5.0).
 
