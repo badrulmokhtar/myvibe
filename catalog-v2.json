@@ -33,7 +33,7 @@
     {
       "id": "com.badru.transform2d5",
       "name": "2.5D Transform",
-      "version": "0.9.5",
+      "version": "0.9.7",
       "description": "Create precise 2.5D views while keeping text, vectors, gradients, and linked artwork editable.",
       "host": "Adobe Illustrator",
       "hostVersion": "30.x",
@@ -42,8 +42,8 @@
         {
           "platform": "macos",
           "architecture": "universal",
-          "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/transform2d5-v0.9.5/2.5D-Transform-0.9.5-beta-macos-universal.zip",
-          "sha256": "b42e7861ac4d821d26e25439315b25d97ee653ed5f3844b38f6193b775b23e14",
+          "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/transform2d5-v0.9.7/2.5D-Transform-0.9.7-beta-macos-universal.zip",
+          "sha256": "3e51fad4a44bcab8c852f8df941279c5eb520981337919e9887bd7483a20e990",
           "signature": {
             "type": "developer-id",
             "required": false
@@ -52,12 +52,66 @@
         {
           "platform": "windows",
           "architecture": "x64",
-          "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/transform2d5-v0.9.5/2.5D-Transform-0.9.5-beta-win-x64.zip",
-          "sha256": "88dfa7099458b53ee7d78006c247f368c7470aaa89fed7a426648faa48932944",
+          "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/transform2d5-v0.9.7/2.5D-Transform-0.9.7-beta-win-x64.zip",
+          "sha256": "eb87395ddbcb09837e073130d7ba5488975882475f864b512cc1e9982269eb5b",
           "signature": {
             "type": "authenticode",
             "required": false
           }
+        }
+      ],
+      "releases": [
+        {
+          "version": "0.9.7",
+          "releasedAt": "2026-09-21",
+          "artifacts": [
+            {
+              "platform": "macos",
+              "architecture": "universal",
+              "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/transform2d5-v0.9.7/2.5D-Transform-0.9.7-beta-macos-universal.zip",
+              "sha256": "3e51fad4a44bcab8c852f8df941279c5eb520981337919e9887bd7483a20e990",
+              "signature": {
+                "type": "developer-id",
+                "required": false
+              }
+            },
+            {
+              "platform": "windows",
+              "architecture": "x64",
+              "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/transform2d5-v0.9.7/2.5D-Transform-0.9.7-beta-win-x64.zip",
+              "sha256": "eb87395ddbcb09837e073130d7ba5488975882475f864b512cc1e9982269eb5b",
+              "signature": {
+                "type": "authenticode",
+                "required": false
+              }
+            }
+          ]
+        },
+        {
+          "version": "0.9.5",
+          "artifacts": [
+            {
+              "platform": "macos",
+              "architecture": "universal",
+              "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/transform2d5-v0.9.5/2.5D-Transform-0.9.5-beta-macos-universal.zip",
+              "sha256": "b42e7861ac4d821d26e25439315b25d97ee653ed5f3844b38f6193b775b23e14",
+              "signature": {
+                "type": "developer-id",
+                "required": false
+              }
+            },
+            {
+              "platform": "windows",
+              "architecture": "x64",
+              "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/transform2d5-v0.9.5/2.5D-Transform-0.9.5-beta-win-x64.zip",
+              "sha256": "88dfa7099458b53ee7d78006c247f368c7470aaa89fed7a426648faa48932944",
+              "signature": {
+                "type": "authenticode",
+                "required": false
+              }
+            }
+          ],
+          "releasedAt": "2026-08-12"
         }
       ]
     },
@@ -101,14 +155,20 @@
               "architecture": "universal",
               "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/tonemesh-v0.9.9/ToneMesh-0.9.9-beta-macos-universal.zip",
               "sha256": "ef7a73f32c11017632d7df337c7fdc43ed0b933dd5e3a503c0bb6c4c0bbfddfc",
-              "signature": { "type": "developer-id", "required": false }
+              "signature": {
+                "type": "developer-id",
+                "required": false
+              }
             },
             {
               "platform": "windows",
               "architecture": "x64",
               "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/tonemesh-v0.9.9/ToneMesh-0.9.9-beta-win-x64.zip",
               "sha256": "94f56c2d0a7c1fa4412357a9669d9b54ee9ef360065cd74a9b0c67be5b08da8f",
-              "signature": { "type": "authenticode", "required": false }
+              "signature": {
+                "type": "authenticode",
+                "required": false
+              }
             }
           ]
         },
@@ -121,14 +181,20 @@
               "architecture": "universal",
               "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/tonemesh-v0.9.8/ToneMesh-0.9.8-beta-macos-universal.zip",
               "sha256": "5683239e2d905cd6eb94cfa29c07207a1cd657aefe2a23d96598cd7fbf672f19",
-              "signature": { "type": "developer-id", "required": false }
+              "signature": {
+                "type": "developer-id",
+                "required": false
+              }
             },
             {
               "platform": "windows",
               "architecture": "x64",
               "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/tonemesh-v0.9.8/ToneMesh-0.9.8-beta-win-x64.zip",
               "sha256": "ff87b3c97f3c27b8ad4ec8989f6b24be205422506c12d4d7883f0a4556f514c4",
-              "signature": { "type": "authenticode", "required": false }
+              "signature": {
+                "type": "authenticode",
+                "required": false
+              }
             }
           ]
         }
@@ -148,14 +214,20 @@
           "architecture": "universal",
           "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/logolize-v1.6.4/Logolize-1.6.4.zip",
           "sha256": "4df3ac448776a8f9a934f650607c1840492bd4a6e492622cfff4ca4213bb95b0",
-          "signature": { "type": "adobe-cep", "required": false }
+          "signature": {
+            "type": "adobe-cep",
+            "required": false
+          }
         },
         {
           "platform": "windows",
           "architecture": "x64",
           "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/logolize-v1.6.4/Logolize-1.6.4.zip",
           "sha256": "4df3ac448776a8f9a934f650607c1840492bd4a6e492622cfff4ca4213bb95b0",
-          "signature": { "type": "adobe-cep", "required": false }
+          "signature": {
+            "type": "adobe-cep",
+            "required": false
+          }
         }
       ],
       "releases": [
@@ -168,14 +240,20 @@
               "architecture": "universal",
               "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/logolize-v1.6.4/Logolize-1.6.4.zip",
               "sha256": "4df3ac448776a8f9a934f650607c1840492bd4a6e492622cfff4ca4213bb95b0",
-              "signature": { "type": "adobe-cep", "required": false }
+              "signature": {
+                "type": "adobe-cep",
+                "required": false
+              }
             },
             {
               "platform": "windows",
               "architecture": "x64",
               "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/logolize-v1.6.4/Logolize-1.6.4.zip",
               "sha256": "4df3ac448776a8f9a934f650607c1840492bd4a6e492622cfff4ca4213bb95b0",
-              "signature": { "type": "adobe-cep", "required": false }
+              "signature": {
+                "type": "adobe-cep",
+                "required": false
+              }
             }
           ]
         }
