@@ -322,6 +322,7 @@ namespace MyVibe
         private TextBlock _detailSummary;
         private TextBlock _aipPathValue;
         private TextBlock _cepPathValue;
+        private StackPanel _componentList;
         private ComboBox _versionPicker;
         private readonly Dictionary<string, List<CatalogPackage>> _catalogReleases = new Dictionary<string, List<CatalogPackage>>(StringComparer.OrdinalIgnoreCase);
 
@@ -677,10 +678,8 @@ namespace MyVibe
             content.Children.Add(MetaRow("Architecture", "x64"));
 
             content.Children.Add(SectionTitle("Included components"));
-            content.Children.Add(ComponentRow("Native .aip engine", "Required"));
-            content.Children.Add(ComponentRow("CEP interface", "Required"));
-            bool runtimeAvailable = PluginInstaller.HasNativeRuntime();
-            content.Children.Add(ComponentRow("Visual C++ runtime", runtimeAvailable ? "Detected" : "Missing", runtimeAvailable ? Success : Danger));
+            _componentList = new StackPanel();
+            content.Children.Add(_componentList);
 
             content.Children.Add(SectionTitle("Install locations"));
             _aipPathValue = new TextBlock { Text = PluginInstaller.GetAipPath(_selectedPlugin) ?? "CEP-only plug-in", Foreground = Muted, FontSize = 10, TextWrapping = TextWrapping.Wrap };
@@ -1232,6 +1231,11 @@ namespace MyVibe
                 _detailSummary.Text = plugin.Summary;
                 _aipPathValue.Text = PluginInstaller.GetAipPath(plugin) ?? "CEP-only plug-in";
                 _cepPathValue.Text = PluginInstaller.GetCepPath(plugin);
+                _componentList.Children.Clear();
+                _componentList.Children.Add(ComponentRow("Native .aip engine", plugin.HasNative ? "Required" : "Not required", plugin.HasNative ? Success : Muted));
+                _componentList.Children.Add(ComponentRow("CEP interface", "Required"));
+                bool runtimeAvailable = PluginInstaller.HasNativeRuntime();
+                _componentList.Children.Add(ComponentRow("Visual C++ runtime", !plugin.HasNative ? "Not required" : runtimeAvailable ? "Detected" : "Missing", !plugin.HasNative ? Muted : runtimeAvailable ? Success : Danger));
                 UpdateVersionPicker();
                 ShowOperation(String.Empty, false);
                 RefreshState();
