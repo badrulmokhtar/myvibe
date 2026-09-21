@@ -1,4 +1,4 @@
-# MyVibe 0.5.0
+# MyVibe 0.5.1
 
 MyVibe is a dependency-free Windows manager for **2.5D Transform 0.9.6**, **ToneMesh 0.9.9**, and **Logolize 1.6.4** for Adobe Illustrator 2026. The verified release selector can install the latest build or roll back to an earlier GitHub release.
 
@@ -34,14 +34,14 @@ powershell -ExecutionPolicy Bypass -File .\myvibe\build-release.ps1
 
 ## Current behavior
 
-- Displays and independently manages 2.5D Transform, ToneMesh, and Logolize.
+- Displays and independently manages 2.5D Transform, ToneMesh, Logolize, and AutoOps.
 - Detects complete, missing, and partial installations for each plugin.
 - Reads the CEP manifest when a manually installed plugin has no MyVibe version record.
 - Detects the Illustrator 2026 installation and required Visual C++ runtime.
 - Refuses install/remove while Illustrator is open.
 - Requests administrator access only when installing or removing.
 - Backs up the exact current `.aip` and CEP folder before changing them.
-- Installs 2.5D Transform, ToneMesh, and Logolize from the verified catalog.
+- Installs 2.5D Transform, ToneMesh, Logolize, and AutoOps from the verified catalog.
 - Removes each plugin's components and clears only the current plugin's CEP cache.
 - Restores the previous copy if installation or removal fails partway through.
 - Validates the expected CEP manifest during extraction; CEP signatures are enforced when the catalog requires them, while beta CEP-only releases may explicitly opt out.
@@ -53,7 +53,7 @@ powershell -ExecutionPolicy Bypass -File .\myvibe\build-release.ps1
 
 ## Upgrading from 0.2
 
-MyVibe 0.2 detects the newer manager but does not replace its own unsigned executable. Download MyVibe 0.5.0 from the official GitHub release, extract it to a writable user folder, and run `MyVibe.exe`. Starting with 0.3, future verified manager updates can install and restart in-app.
+MyVibe 0.2 detects the newer manager but does not replace its own unsigned executable. Download MyVibe 0.5.1 from the official GitHub release, extract it to a writable user folder, and run `MyVibe.exe`. Starting with 0.3, future verified manager updates can install and restart in-app.
 
 ## Release verification
 

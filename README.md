@@ -4,7 +4,7 @@
 
 <h1 align="center">MyVibe</h1>
 
-<p align="center">Install and maintain Illustrator plug-ins on Windows and macOS.</p>
+<p align="center">Install and maintain AutoOps, 2.5D Transform, ToneMesh, and Logolize on Windows and macOS.</p>
 
 <p align="center">
   <img alt="Windows 10 and 11" src="https://img.shields.io/badge/Windows-10%20%7C%2011-4b9cff">
@@ -15,24 +15,28 @@
 
 ![MyVibe plugin manager](assets/myvibe-app.png)
 
-## Download MyVibe 0.5.0 beta
+## Download MyVibe 0.5.1 beta
 
 | Platform | Download | Requirements |
 | --- | --- | --- |
-| Windows | [Windows x64 ZIP](https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.5.0/MyVibe-0.5.0-beta.1-win-x64.zip) | Windows 10/11 x64 |
-| macOS | [Universal ZIP](https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.5.0/MyVibe-0.5.0-beta.2-macos-universal.zip) | macOS 13+, Apple silicon or Intel |
+| Windows | [Windows x64 ZIP](https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.5.1/MyVibe-0.5.1-beta.1-win-x64.zip) | Windows 10/11 x64 |
+| macOS | [Universal ZIP](https://github.com/badrulmokhtar/myvibe/releases/download/myvibe-v0.5.1/MyVibe-0.5.1-beta.1-macos-universal.zip) | macOS 13+, Apple silicon or Intel |
 
-SHA-256 files are published beside both downloads on the [release page](https://github.com/badrulmokhtar/myvibe/releases/tag/myvibe-v0.5.0).
+SHA-256 files are published beside both downloads on the [release page](https://github.com/badrulmokhtar/myvibe/releases/tag/myvibe-v0.5.1).
 
 > **Beta signing notice:** These builds are not yet signed with Windows Authenticode or Apple Developer ID. The operating system may show an Unknown Publisher or unidentified developer warning. MyVibe still requires a signed catalog, an official GitHub release URL, and an exact SHA-256 match before installation. See [Unsigned beta installation](docs/UNSIGNED-BETA.md).
 
 ## Managed plug-ins
+
+- **[AutoOps 0.2.13](https://github.com/badrulmokhtar/myvibe/releases/tag/autoops-v0.2.13)** — visual automation, quick actions, and folder-backed script management for Illustrator. Requires MyVibe 0.5.1 or newer.
 
 - **2.5D Transform 0.9.7** — editable X/Y/Z rotation and perspective views for Illustrator artwork.
 - **ToneMesh 0.9.9** — editable tone-driven vector fields with custom marks, structures, contour handling, and automatic suspension when its panel is hidden.
 - **[Logolize 1.6.4](https://github.com/badrulmokhtar/myvibe/releases/tag/logolize-v1.6.4)** — responsive, editable logo-system generation inside Illustrator.
 
 Logolize is a CEP-only plug-in, so the same verified package works on macOS and Windows. Its release package and SHA-256 checksum are published on the [Logolize 1.6.4 release page](https://github.com/badrulmokhtar/myvibe/releases/tag/logolize-v1.6.4).
+
+AutoOps is also CEP-only: one verified package supports macOS (Apple silicon/Intel) and Windows x64 with Illustrator 2026. After installation, open **Window → Extensions → AutoOps**. The Illustrator C++ SDK is not required. Automated checks cover packaging and simulated host behavior; interactive Illustrator qualification remains pending.
 
 Each plug-in can be installed, updated, repaired, or removed independently.
 
@@ -76,10 +80,11 @@ Each plug-in can be installed, updated, repaired, or removed independently.
 | --- | --- |
 | Operating system | Windows 10/11 x64; macOS 13+ universal |
 | Adobe application | Illustrator 2026, version 30.x |
-| MyVibe | 0.5.0 beta |
+| MyVibe | 0.5.1 beta |
 | 2.5D Transform | 0.9.7 beta |
 | ToneMesh | 0.9.9 beta |
 | Logolize | 1.6.4 beta |
+| AutoOps | 0.2.13 beta |
 
 ## Documentation
 

@@ -1,8 +1,8 @@
-MyVibe 0.5.0 beta
+MyVibe 0.5.1 beta
 =================
 
 MyVibe installs, updates, rolls back, and removes 2.5D Transform 0.9.6,
-ToneMesh 0.9.9, and Logolize 1.6.4
+ToneMesh 0.9.9, Logolize 1.6.4, and AutoOps 0.2.13
 for Adobe Illustrator.
 
 Compatibility

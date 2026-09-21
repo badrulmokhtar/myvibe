@@ -30,9 +30,9 @@ using Polyline = System.Windows.Shapes.Polyline;
 [assembly: AssemblyCompany("MyVibe")]
 [assembly: AssemblyProduct("MyVibe")]
 [assembly: AssemblyCopyright("Copyright 2026 MyVibe")]
-[assembly: AssemblyVersion("0.5.0.0")]
-[assembly: AssemblyFileVersion("0.5.0.0")]
-[assembly: AssemblyInformationalVersion("0.5.0")]
+[assembly: AssemblyVersion("0.5.1.0")]
+[assembly: AssemblyFileVersion("0.5.1.0")]
+[assembly: AssemblyInformationalVersion("0.5.1")]
 
 namespace MyVibe
 {
@@ -100,11 +100,14 @@ namespace MyVibe
                 string error = null;
                 bool pathsAreSafe = PluginInstaller.IsSafeResultPath(Path.Combine(PluginInstaller.IpcRoot, "result-self-test.txt"))
                     && !PluginInstaller.IsSafeResultPath(Path.Combine(Path.GetTempPath(), "myvibe-unsafe.txt"));
-                bool registryIsValid = PluginRegistry.All.Length == 3
+                bool registryIsValid = PluginRegistry.All.Length == 4
                     && PluginRegistry.Find("com.badru.transform2d5") != null
                     && PluginRegistry.Find("com.badru.tonemesh") != null
                     && PluginRegistry.Find("com.badru.logolize") != null
-                    && !PluginRegistry.Logolize.HasNative;
+                    && !PluginRegistry.Logolize.HasNative
+                    && PluginRegistry.Find("com.badru.autoops") != null
+                    && !PluginRegistry.AutoOps.HasNative
+                    && PluginRegistry.AutoOps.CepFolderName == "AutoOps";
                 bool releaseUrlsAreStrict = CatalogClient.IsTrustedReleaseUrl("https://github.com/badrulmokhtar/myvibe/releases/download/test/file.zip")
                     && !CatalogClient.IsTrustedReleaseUrl("https://github.com/attacker/myvibe/releases/download/test/file.zip")
                     && !CatalogClient.IsTrustedReleaseUrl("http://github.com/badrulmokhtar/myvibe/releases/download/test/file.zip");
@@ -257,7 +260,13 @@ namespace MyVibe
             "Responsive logo-system generation with editable Illustrator artwork.",
             null, "Logolize", "logolize.version", "ILST_*_com.badru.logolize.*", null, false);
 
-        internal static readonly PluginDefinition[] All = { Transform2D5, ToneMesh, Logolize };
+        internal static readonly PluginDefinition AutoOps = new PluginDefinition(
+            "com.badru.autoops", "AutoOps", "0.2.13",
+            "Build visual automations, run quick actions, and manage Illustrator scripts.",
+            "Visual automation, quick actions, and folder-backed script management for Illustrator.",
+            null, "AutoOps", "autoops.version", "ILST_*_com.badru.autoops.*", null, false);
+
+        internal static readonly PluginDefinition[] All = { Transform2D5, ToneMesh, Logolize, AutoOps };
 
         internal static PluginDefinition Find(string id)
         {
@@ -313,6 +322,7 @@ namespace MyVibe
         private TextBlock _detailSummary;
         private TextBlock _aipPathValue;
         private TextBlock _cepPathValue;
+        private StackPanel _componentList;
         private ComboBox _versionPicker;
         private readonly Dictionary<string, List<CatalogPackage>> _catalogReleases = new Dictionary<string, List<CatalogPackage>>(StringComparer.OrdinalIgnoreCase);
 
@@ -426,7 +436,7 @@ namespace MyVibe
                 CornerRadius = new CornerRadius(8),
                 Padding = new Thickness(10, 6, 10, 6),
                 VerticalAlignment = VerticalAlignment.Center,
-                Child = new TextBlock { Text = "MyVibe 0.5.0", Foreground = Muted, FontSize = 11 }
+                Child = new TextBlock { Text = "MyVibe 0.5.1", Foreground = Muted, FontSize = 11 }
             };
             Grid.SetColumn(version, 2);
             headerGrid.Children.Add(version);
@@ -668,10 +678,8 @@ namespace MyVibe
             content.Children.Add(MetaRow("Architecture", "x64"));
 
             content.Children.Add(SectionTitle("Included components"));
-            content.Children.Add(ComponentRow("Native .aip engine", "Required"));
-            content.Children.Add(ComponentRow("CEP interface", "Required"));
-            bool runtimeAvailable = PluginInstaller.HasNativeRuntime();
-            content.Children.Add(ComponentRow("Visual C++ runtime", runtimeAvailable ? "Detected" : "Missing", runtimeAvailable ? Success : Danger));
+            _componentList = new StackPanel();
+            content.Children.Add(_componentList);
 
             content.Children.Add(SectionTitle("Install locations"));
             _aipPathValue = new TextBlock { Text = PluginInstaller.GetAipPath(_selectedPlugin) ?? "CEP-only plug-in", Foreground = Muted, FontSize = 10, TextWrapping = TextWrapping.Wrap };
@@ -1223,6 +1231,11 @@ namespace MyVibe
                 _detailSummary.Text = plugin.Summary;
                 _aipPathValue.Text = PluginInstaller.GetAipPath(plugin) ?? "CEP-only plug-in";
                 _cepPathValue.Text = PluginInstaller.GetCepPath(plugin);
+                _componentList.Children.Clear();
+                _componentList.Children.Add(ComponentRow("Native .aip engine", plugin.HasNative ? "Required" : "Not required", plugin.HasNative ? Success : Muted));
+                _componentList.Children.Add(ComponentRow("CEP interface", "Required"));
+                bool runtimeAvailable = PluginInstaller.HasNativeRuntime();
+                _componentList.Children.Add(ComponentRow("Visual C++ runtime", !plugin.HasNative ? "Not required" : runtimeAvailable ? "Detected" : "Missing", !plugin.HasNative ? Muted : runtimeAvailable ? Success : Danger));
                 UpdateVersionPicker();
                 ShowOperation(String.Empty, false);
                 RefreshState();
@@ -2173,7 +2186,7 @@ namespace MyVibe
         private const string CatalogV2SignatureUrl = "https://raw.githubusercontent.com/badrulmokhtar/myvibe/main/catalog-v2.json.sig";
         private const string CatalogV1Url = "https://raw.githubusercontent.com/badrulmokhtar/myvibe/main/catalog.json";
         private const string CatalogV1SignatureUrl = "https://raw.githubusercontent.com/badrulmokhtar/myvibe/main/catalog.json.sig";
-        private const string CurrentManagerVersion = "0.5.0";
+        private const string CurrentManagerVersion = "0.5.1";
         private const string TrustedReleasePath = "/badrulmokhtar/myvibe/releases/download/";
         private const string CatalogV1PublicModulus = "yjcrH4sS/n+zyx4/RkZBc6WHTpzkBebMMRuHVSel+Llok5aeWJT8vCTOMsIUWf9pkMYn87tLzAO3iRTJPeF9FondJhzGqixpKzo1vhpxursq4AKbVpH8xDf39/RVkTIQOUxu7h1JlwenfAVwzVwXjngb0dV1i/16tiZHa00wllhJdhj80DM8kcp2XBmg9+wVMLS1JEQNTnhUUvkejsRTVytnvzogLNHzvkmCDEDeSzIn4j0lddeqEUbKYLSIO/A0xQhHkodgHoXym5/O0a6TC0NA0tUD43O6Hhlc9zOplliSP99dDVhAp9Kk+M1AwPRYqZHQL1qXMUpn2E16tTPhpS011ee96Rf2IFF7YhOo02RHsOlhY9U7eDPg0BGykWGZ+nDYrvGImPJNlz2faVVhhIBTzrtTcJmQVQdpyqDlHFzscCP2vHFKEZIkVT7u3ZmX2Y+Ct+fjrimelAH+weQ5aqN9Zjrx2fNs4lYb/CHceUq1blqyAzBD4nao1JUg4jxB";
         private const string CatalogV2PublicModulus = "qbFAZN9zfMnhezGb94F7uYNfOOPqCaybZ22EM4XamudRb9QSIsGxwhZ5nJCxMqtCMkzgVTV0EcWGK5sJTpMBASD8ai8ZkyFFd6HIur6jjf7JeuELtzG4QtOE6cBtcQpTZPoYDpJjhqfiRs3BnBgdFdydWJp7msFrbs0UH7yxY03fAZKKD3BDjE0+NKOjir2okTbjO8KJQjUf3mE+YrrAfN/gLfjRyYLv3NSKEDf9Mor87XnHDfulhSawp72BIlmKEI4UtFHxai2lv4ei+K8jwtID+SKxz/Xb19C3hX2L5/uIAft56FPex+1W49mTbq76kXJdgfPgqoaPQnTi28KCFCEgl+ngvkkZpoF1/A+v2Rnc25VchlFLRwWST8LA8VSt0mag2tANBeKjo1vl3lLkJmyz5S+2ddWiMTUtoZQThjSZjHRYgKAdl1DwEez9kww5ioVkrzKo5n7duooh4DMhEiY9YNLapchuksofpPxrexcdNkJgRvB8xMnSDRpxo+lJ";
@@ -2654,7 +2667,7 @@ namespace MyVibe
                 string partial = archive + ".partial";
                 using (WebClient client = new WebClient())
                 {
-                    client.Headers[HttpRequestHeader.UserAgent] = "MyVibe/0.5.0";
+                    client.Headers[HttpRequestHeader.UserAgent] = "MyVibe/0.5.1";
                     await client.DownloadFileTaskAsync(new Uri(package.downloadUrl), partial);
                 }
                 FileInfo managerArchive = new FileInfo(partial);

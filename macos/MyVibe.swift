@@ -3,7 +3,7 @@ import CryptoKit
 import Foundation
 import Security
 
-private let managerVersion = "0.5.0"
+private let managerVersion = "0.5.1"
 private let trustedReleasePrefix = "/badrulmokhtar/myvibe/releases/download/"
 private let maxArchiveBytes: Int64 = 200 * 1024 * 1024
 private let maxExtractedBytes: Int64 = 600 * 1024 * 1024
@@ -24,7 +24,8 @@ enum Registry {
     static let products = [
         RegistryProduct(id: "com.badru.transform2d5", name: "2.5D Transform", version: "0.9.6", description: "Non-destructive 2.5D transforms for Adobe Illustrator.", nativeName: "2.5D Transform.aip", cepName: "2.5D Transform"),
         RegistryProduct(id: "com.badru.tonemesh", name: "ToneMesh", version: "0.9.9", description: "Editable halftone fields with custom marks and low-overhead hidden-panel monitoring.", nativeName: "ToneMesh.aip", cepName: "ToneMesh"),
-        RegistryProduct(id: "com.badru.logolize", name: "Logolize", version: "1.6.4", description: "Generate responsive, editable logo systems in Illustrator.", nativeName: nil, cepName: "Logolize")
+        RegistryProduct(id: "com.badru.logolize", name: "Logolize", version: "1.6.4", description: "Generate responsive, editable logo systems in Illustrator.", nativeName: nil, cepName: "Logolize"),
+        RegistryProduct(id: "com.badru.autoops", name: "AutoOps", version: "0.2.13", description: "Build visual automations, run quick actions, and manage Illustrator scripts.", nativeName: nil, cepName: "AutoOps")
     ]
 
     static func product(id: String) -> RegistryProduct? { products.first { $0.id == id } }
@@ -649,10 +650,12 @@ func selfTest() throws {
     guard Safety.trustedReleaseURL("https://github.com/badrulmokhtar/myvibe/releases/download/test/file.zip"),
           !Safety.trustedReleaseURL("https://github.com/attacker/myvibe/releases/download/test/file.zip"),
           !Safety.trustedReleaseURL("http://github.com/badrulmokhtar/myvibe/releases/download/test/file.zip"),
-          Registry.products.map(\.id) == ["com.badru.transform2d5", "com.badru.tonemesh", "com.badru.logolize"],
+          Registry.products.map(\.id) == ["com.badru.transform2d5", "com.badru.tonemesh", "com.badru.logolize", "com.badru.autoops"],
           Registry.product(id: "com.badru.transform2d5")?.nativeName == "2.5D Transform.aip",
           Registry.product(id: "com.badru.tonemesh")?.cepName == "ToneMesh",
           Registry.product(id: "com.badru.logolize")?.nativeName == nil,
+          Registry.product(id: "com.badru.autoops")?.nativeName == nil,
+          Registry.product(id: "com.badru.autoops")?.cepName == "AutoOps",
           Registry.product(id: "com.badru.unknown") == nil,
           shellQuote("a'b") == "'a'\\''b'",
           shellCommand([("/bin/rm", ["-rf", "/tmp/a b"]), ("/bin/cp", ["-R", "/tmp/a b", "/tmp/c"])]) == "'/bin/rm' '-rf' '/tmp/a b' && '/bin/cp' '-R' '/tmp/a b' '/tmp/c'",

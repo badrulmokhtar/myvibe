@@ -2,6 +2,12 @@
 
 All notable public changes are documented here. Releases follow semantic versioning.
 
+## [0.5.1] - 2026-09-21
+
+- Add AutoOps 0.2.13 to the Windows and macOS plugin registries.
+- AutoOps uses one CEP-only package for both platforms and requires MyVibe 0.5.1.
+- Publish verified Windows x64 and macOS universal manager archives from CI.
+
 ## [0.5.0] - 2026-09-11
 
 ### Added

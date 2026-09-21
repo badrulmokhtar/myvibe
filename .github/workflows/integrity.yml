@@ -32,3 +32,14 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - run: sh macos/build.sh
+      - name: Package verified macOS manager
+        run: |
+          mkdir -p macos/dist
+          ditto -c -k --sequesterRsrc --keepParent macos/build/MyVibe.app macos/dist/MyVibe-0.5.1-beta.1-macos-universal.zip
+          cd macos/dist
+          shasum -a 256 MyVibe-0.5.1-beta.1-macos-universal.zip > MyVibe-0.5.1-beta.1-macos-universal.zip.sha256
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: MyVibe-0.5.1-beta.1-macos-universal
+          path: macos/dist/*
+          if-no-files-found: error

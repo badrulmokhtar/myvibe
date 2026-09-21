@@ -30,18 +30,20 @@ jobs:
           windows\bin\MyVibe.exe --screenshot windows\dist\myvibe-overview.png 1080 720 com.badru.transform2d5
           windows\bin\MyVibe.exe --screenshot windows\dist\myvibe-tonemesh.png 1080 720 com.badru.tonemesh
           windows\bin\MyVibe.exe --screenshot windows\dist\myvibe-logolize.png 1080 720 com.badru.logolize
+          windows\bin\MyVibe.exe --screenshot windows\dist\myvibe-autoops.png 1080 720 com.badru.autoops
           windows\bin\MyVibe.exe --screenshot windows\dist\myvibe-compact.png 760 680 com.badru.tonemesh
 
       - name: Upload verified manager ZIP
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: MyVibe-0.5.0-beta.1-win-x64
+          name: MyVibe-0.5.1-beta.1-win-x64
           path: |
-            windows/dist/MyVibe-0.5.0-beta.1-win-x64.zip
-            windows/dist/MyVibe-0.5.0-beta.1-win-x64.zip.sha256
+            windows/dist/MyVibe-0.5.1-beta.1-win-x64.zip
+            windows/dist/MyVibe-0.5.1-beta.1-win-x64.zip.sha256
             windows/dist/myvibe-windows.png
             windows/dist/myvibe-overview.png
             windows/dist/myvibe-tonemesh.png
             windows/dist/myvibe-logolize.png
+            windows/dist/myvibe-autoops.png
             windows/dist/myvibe-compact.png
           if-no-files-found: error
