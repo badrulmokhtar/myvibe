@@ -27,6 +27,7 @@ for artifact in plugin['artifacts']:
         assert len(manifest.findall('./ExtensionList/Extension')) == 1
         assert b'id="groupsTab"' in archive.read('2.5D Transform/index.html')
         if artifact['platform'] == 'windows':
+            assert '2.5D Transform/META-INF/signatures.xml' in names, 'MyVibe requires signed CEP for native Windows plugins'
             native = archive.read('2.5D Transform.aip')
             assert native[:2] == b'MZ'
             pe = struct.unpack_from('<I', native, 0x3c)[0]
