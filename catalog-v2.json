@@ -258,6 +258,65 @@
           ]
         }
       ]
+    },
+    {
+      "id": "com.badru.autoops",
+      "name": "AutoOps",
+      "version": "0.2.13",
+      "description": "Visual automation, quick actions, and folder-backed script management for Illustrator.",
+      "host": "Adobe Illustrator",
+      "hostVersion": "30.x",
+      "minimumManagerVersion": "0.5.1",
+      "artifacts": [
+        {
+          "platform": "macos",
+          "architecture": "universal",
+          "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/autoops-v0.2.13/AutoOps-0.2.13.zip",
+          "sha256": "92e38a6f2e3cd3bb5408ddffac50b8015ed5dba31adce191722476bb238a79c0",
+          "signature": {
+            "type": "adobe-cep",
+            "required": false
+          }
+        },
+        {
+          "platform": "windows",
+          "architecture": "x64",
+          "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/autoops-v0.2.13/AutoOps-0.2.13.zip",
+          "sha256": "92e38a6f2e3cd3bb5408ddffac50b8015ed5dba31adce191722476bb238a79c0",
+          "signature": {
+            "type": "adobe-cep",
+            "required": false
+          }
+        }
+      ],
+      "releases": [
+        {
+          "version": "0.2.13",
+          "releasedAt": "2026-09-21",
+          "artifacts": [
+            {
+              "platform": "macos",
+              "architecture": "universal",
+              "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/autoops-v0.2.13/AutoOps-0.2.13.zip",
+              "sha256": "92e38a6f2e3cd3bb5408ddffac50b8015ed5dba31adce191722476bb238a79c0",
+              "signature": {
+                "type": "adobe-cep",
+                "required": false
+              }
+            },
+            {
+              "platform": "windows",
+              "architecture": "x64",
+              "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/autoops-v0.2.13/AutoOps-0.2.13.zip",
+              "sha256": "92e38a6f2e3cd3bb5408ddffac50b8015ed5dba31adce191722476bb238a79c0",
+              "signature": {
+                "type": "adobe-cep",
+                "required": false
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
