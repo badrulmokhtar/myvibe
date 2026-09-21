@@ -4,7 +4,7 @@ Use a clean Windows 10/11 x64 test profile with Illustrator 2026 and the Microso
 
 - Download the MyVibe ZIP from the official GitHub release and confirm its SHA-256 checksum.
 - Extract it to a writable user folder and launch `MyVibe.exe`.
-- Confirm 2.5D Transform, ToneMesh, and Logolize are listed.
+- Confirm 2.5D Transform, ToneMesh, Logolize, and AutoOps are listed.
 - With Illustrator closed, install each plugin and approve the administrator prompt.
 - Start Illustrator and open all three panels from **Window > Extensions**.
 - Create a simple document and confirm each panel can apply its primary effect.

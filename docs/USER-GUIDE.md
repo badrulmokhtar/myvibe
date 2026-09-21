@@ -1,8 +1,8 @@
 # MyVibe plug-in manager user guide
 
-This guide explains how to install, update, roll back, remove, and recover **2.5D Transform**, **ToneMesh**, and **Logolize** with **MyVibe**, then covers the complete 2.5D Transform workflow inside Adobe Illustrator.
+This guide explains how to install, update, roll back, remove, and recover **2.5D Transform**, **ToneMesh**, **Logolize**, and **AutoOps** with **MyVibe**, then covers the complete 2.5D Transform workflow inside Adobe Illustrator.
 
-> Current beta compatibility: Windows 10/11 x64 or macOS 13+ universal; Adobe Illustrator 2026, version 30.x; MyVibe 0.5.0; 2.5D Transform 0.9.6; ToneMesh 0.9.9; Logolize 1.6.4. Installation steps below cover Windows; see [Unsigned beta installation](UNSIGNED-BETA.md) for macOS opening instructions.
+> Current beta compatibility: Windows 10/11 x64 or macOS 13+ universal; Adobe Illustrator 2026, version 30.x; MyVibe 0.5.1; 2.5D Transform 0.9.6; ToneMesh 0.9.9; Logolize 1.6.4; AutoOps 0.2.13. Installation steps below cover Windows; see [Unsigned beta installation](UNSIGNED-BETA.md) for macOS opening instructions.
 
 [Download the PDF edition](MyVibe-and-2.5D-Transform-User-Guide.pdf) (the PDF focuses on the 2.5D Transform workflow.)
 
@@ -31,7 +31,7 @@ MyVibe manages creative plug-ins on Windows and macOS. Native plug-ins install b
 - The native `.aip` engine that performs the Illustrator transformation.
 - The CEP interface that provides the main panel and Linked Groups panel.
 
-Logolize is CEP-only: it installs its CEP interface without a native `.aip` engine. The same package works on Windows and macOS; beta releases may require CEP developer mode when the catalog marks the CEP signature as optional.
+Logolize and AutoOps are CEP-only: it installs its CEP interface without a native `.aip` engine. The same package works on Windows and macOS; beta releases may require CEP developer mode when the catalog marks the CEP signature as optional.
 
 2.5D Transform adds live X, Y, Z, and perspective controls for editable Illustrator artwork. It supports paths, compound paths, Pathfinder results, groups, clipping groups, live text, symbols, gradients, raster images, and placed images.
 
@@ -91,14 +91,14 @@ MyVibe 0.2 detects the current manager but cannot replace its own unsigned execu
 
 1. Close Adobe Illustrator.
 2. Run `MyVibe.exe`.
-3. Select the **2.5D Transform**, **ToneMesh**, or **Logolize** card.
+3. Select the **2.5D Transform**, **ToneMesh**, **Logolize**, or **AutoOps** card.
 4. Review the detail panel. Confirm that Illustrator 2026 and the Visual C++ runtime are detected.
 5. Select **Install plugin**.
 6. Approve the Windows administrator prompt. MyVibe requests elevated access only when it changes the Illustrator installation.
 7. Wait for the success message. Do not open Illustrator while installation is in progress.
 8. Start Illustrator after MyVibe confirms that installation is complete.
 
-MyVibe installs the selected native engine and CEP interface together when the plug-in has a native engine. All three plug-ins use the verified online catalog; Logolize is CEP-only. Avoid manually mixing files from different releases.
+MyVibe installs the selected native engine and CEP interface together when the plug-in has a native engine. All four plug-ins use the verified online catalog; Logolize and AutoOps are CEP-only. Avoid manually mixing files from different releases.
 
 ## 5. Open the plug-in in Illustrator
 
@@ -353,3 +353,9 @@ MyVibe normally restores the previous copy. Read the complete message, keep Illu
 Use [GitHub Issues](https://github.com/badrulmokhtar/myvibe/issues) for reproducible bugs and feature requests. For security concerns, use GitHub private vulnerability reporting instead of a public issue.
 
 Include the affected version, operating system, Illustrator version, reproduction steps, and exact error message. Never include passwords, tokens, private documents, customer artwork, or signing material.
+
+## AutoOps
+
+Use MyVibe 0.5.1 or newer, close Illustrator, select AutoOps, and choose Install. Restart Illustrator and open **Window > Extensions > AutoOps** (Extensions may be labelled Extensions (Legacy)). AutoOps provides Quick Actions, a visual Automation builder, and a folder-backed Scripts library. No automation or script runs automatically on installation.
+
+AutoOps is an unsigned CEP beta for Illustrator 30.x on both platforms. MyVibe verifies its catalog signature and package SHA-256. Personal libraries remain in per-user storage when the extension is repaired or removed.
