@@ -53,7 +53,7 @@
           "platform": "windows",
           "architecture": "x64",
           "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/transform2d5-v0.9.7/2.5D-Transform-0.9.7-beta-win-x64.zip",
-          "sha256": "eb87395ddbcb09837e073130d7ba5488975882475f864b512cc1e9982269eb5b",
+          "sha256": "7e26ee0a7ce547e606c843f63791bd74c522ee5be50664a6e2cfffd1c6127ef9",
           "signature": {
             "type": "authenticode",
             "required": false
@@ -79,7 +79,7 @@
               "platform": "windows",
               "architecture": "x64",
               "downloadUrl": "https://github.com/badrulmokhtar/myvibe/releases/download/transform2d5-v0.9.7/2.5D-Transform-0.9.7-beta-win-x64.zip",
-              "sha256": "eb87395ddbcb09837e073130d7ba5488975882475f864b512cc1e9982269eb5b",
+              "sha256": "7e26ee0a7ce547e606c843f63791bd74c522ee5be50664a6e2cfffd1c6127ef9",
               "signature": {
                 "type": "authenticode",
                 "required": false
