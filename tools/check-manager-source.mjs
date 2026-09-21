@@ -14,5 +14,8 @@ assert.match(macos, /com\.badru\.logolize/);
 assert.match(macos, /nativeName: String\?/);
 assert.match(macos, /ProductRelease/);
 assert.match(macos, /Roll Back/);
-assert.match(workflow, /MyVibe-0\.5\.0-beta\.1-win-x64/);
+assert.match(workflow, /MyVibe-0\.5\.1-beta\.1-win-x64/);
 console.log('Cross-platform manager source checks passed.');
+
+assert.match(windows, /com\.badru\.autoops/);
+assert.match(macos, /com\.badru\.autoops/);

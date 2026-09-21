@@ -38,7 +38,7 @@ plutil -insert CFBundleIdentifier -string com.badru.myvibe "$CONTENTS/Info.plist
 plutil -insert CFBundleName -string MyVibe "$CONTENTS/Info.plist"
 plutil -insert CFBundleDisplayName -string MyVibe "$CONTENTS/Info.plist"
 plutil -insert CFBundleIconFile -string MyVibe.icns "$CONTENTS/Info.plist"
-plutil -insert CFBundleShortVersionString -string 0.5.0 "$CONTENTS/Info.plist"
+plutil -insert CFBundleShortVersionString -string 0.5.1 "$CONTENTS/Info.plist"
 plutil -insert CFBundleVersion -string 1 "$CONTENTS/Info.plist"
 plutil -insert LSMinimumSystemVersion -string 13.0 "$CONTENTS/Info.plist"
 plutil -insert NSHighResolutionCapable -bool true "$CONTENTS/Info.plist"
