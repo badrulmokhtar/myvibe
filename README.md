@@ -28,7 +28,7 @@ SHA-256 files are published beside both downloads on the [release page](https://
 
 ## Managed plug-ins
 
-- **2.5D Transform 0.9.6** — editable X/Y/Z rotation and perspective views for Illustrator artwork.
+- **2.5D Transform 0.9.7** — editable X/Y/Z rotation and perspective views for Illustrator artwork.
 - **ToneMesh 0.9.9** — editable tone-driven vector fields with custom marks, structures, contour handling, and automatic suspension when its panel is hidden.
 - **[Logolize 1.6.4](https://github.com/badrulmokhtar/myvibe/releases/tag/logolize-v1.6.4)** — responsive, editable logo-system generation inside Illustrator.
 
@@ -77,7 +77,7 @@ Each plug-in can be installed, updated, repaired, or removed independently.
 | Operating system | Windows 10/11 x64; macOS 13+ universal |
 | Adobe application | Illustrator 2026, version 30.x |
 | MyVibe | 0.5.0 beta |
-| 2.5D Transform | 0.9.6 beta |
+| 2.5D Transform | 0.9.7 beta |
 | ToneMesh | 0.9.9 beta |
 | Logolize | 1.6.4 beta |
 
